@@ -1,0 +1,8 @@
+[
+    {"name": "Select a job type", "value": ""}, 
+    {"name": "Designer", "value": "designer"},
+    {"name": "Development", "value": "development"}, 
+    {"name": "Product", "value": "product"}, 
+    {"name": "Other", "value": "other"}
+]
+  

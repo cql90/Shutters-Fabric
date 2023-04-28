@@ -1,0 +1,10 @@
+[
+    {"name": "id", "value": ""},
+    {"name": "width", "value": ""},
+    {"name": "length", "value": ""},
+    {"name": "hingsChoice", "value": ""},
+    {"name": "panel", "value": ""},
+    {"name": "outsideFrame", "value": ""},
+    {"name": "insideFrame", "value": ""},
+    {"name": "numOfFrame", "value": ""}
+]

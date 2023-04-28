@@ -1,0 +1,20 @@
+[
+    [
+        {"key": "true", "value": "red"},
+        {"key": "false", "value": "green"},
+        {"key": "false", "value": "blue"}
+    ],
+    [
+        {"checked": "true", "value": "You must accept the terms and conditions."}
+    ],
+    [
+        {"key": "Young Age", "value": "young"},
+        {"key": "Middle Age", "value": "middle"},
+        {"key": "Old Age", "value": "old"}
+    ],
+    [
+        {"key": "Lion is King", "value": "lion"},
+        {"key": "Tiger is Best", "value": "tiger"},
+        {"key": "Horse is Champion", "value": "horse"}
+    ]
+]

@@ -1,7 +1,148 @@
+*{
+  outline: none;
+  transition: 0.3s ease all;
+}
+
+main{
+  max-width: 1024px;
+  margin: auto;
+}
+
 .App {
+  /* padding: 40px; */
+  min-height: 100vh;
+}
+
+.App-logo {
+  pointer-events: none;
+  margin: 20px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  margin-bottom: 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
   text-align: center;
 }
 
+.App-header img {
+  width: 150px;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.styledInput {
+  margin-bottom: 25px;
+}
+
+.styledInput > input {
+  background: #fefefe;
+  border: 1px solid #8db2e2;
+  box-sizing: border-box;
+  border-radius: 4px;
+  height: 50px;
+  min-width: 100%;
+  max-width: max-content;
+  padding: 5px 15px;
+  padding-top: 0.7rem;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: #242235;
+  font-style: normal;
+  font-size: 0.87rem;
+  line-height: 15px;
+}
+
+.styledInput > input:focus {
+  box-shadow: 1px 2px 4px #8db2e2;
+}
+
+.styledInput > input::placeholder {
+  color: #929292;
+  font-size: 14.4px;
+  font-family: "Courier New", Courier, monospace;
+  font-style: normal;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.helperText {
+  color: #dc3545;
+  font-size: 12px;
+  min-height: 15px;
+  text-align: left;
+}
+
+button {
+  color: #fff;
+  background: #2f4858;
+  border-radius: 4px;
+  font-family: "PT Sans", sans-serif;
+  font-weight: 700;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 15px;
+  font-size: 18px;
+  height: 50px;
+}
+
+button:hover {
+  box-shadow: 0px 3.5px 5px #e1e5f1a0;
+  transform: translateY(-0.7px);
+}
+
+button:focus:before {
+  transition: all 0.4s ease-out;
+  opacity: 0;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  margin-left: -20px;
+}
+
+button:before {
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+a {
+  cursor: pointer;
+}
+
+.App {
+  /* text-align: center; */
+}
+/* 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -35,4 +176,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */

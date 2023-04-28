@@ -1,0 +1,87 @@
+[
+    [
+        {"id": "1", "Group": "Company Info", "name": "Invoice Number", "value": "invoiceNumber"},
+        {"id": "2", "Group": "Company Info", "name": "Customer", "value": "customer"},
+        {"id": "3", "Group": "Company Info", "name": "Sale Person Name", "value": "saleMan"}
+    ],
+    [
+        {"id": "4", "Group": "Measurement Type", "name": "Standard", "value": "Standard"},
+        {"id": "5", "Group": "Measurement Type", "name": "Frame to Frame", "value": "F2F"}
+    ],
+    [
+        {"id": "6", "Group": "Width and Length", "name": "Width", "value": "width"},
+        {"id": "7", "Group": "Width and Length", "name": "Length", "value": "length"},
+        {"id": "8", "Group": "Width and Length", "name": "Finish Width", "value": ""},
+        {"id": "9", "Group": "Width and Length", "name": "Finish Length", "value": ""},
+        {"id": "10", "Group": "Width and Length", "name": "Sill Width", "value": ""}
+    ],
+    [
+        {"id": "11", "Group": "Instruction", "name": "Instruction", "value": "instruction"}
+    ],
+    [
+        {"id": "12", "Group": "Mount", "name": "Inside", "value": "IM"},
+        {"id": "13", "Group": "Mount", "name": "Outside", "value": "OM"},
+        {"id": "14", "Group": "Mount", "name": "Dead Panel", "value": "DP"}
+    ],
+    [
+        {"id": "14", "Group": "Louver Size", "name": "2 1/2", "value": "2 1/2"},
+        {"id": "15", "Group": "Louver Size", "name": "3 1/2", "value": "3 1/2"},
+        {"id": "16", "Group": "Louver Size", "name": "4 1/2", "value": "4 1/2"}
+    ],
+    [
+        {"id": "17", "Group": "Panel", "name": "One Panel", "value": "1"},
+        {"id": "18", "Group": "Panel", "name": "Two Panel", "value": "2"},
+        {"id": "19", "Group": "Panel", "name": "Four Panel", "value": "4"}
+    ],
+    [
+        {"id": "20", "Group": "Frame Size Outside Mount", "name": "1 1/4 inch Frame", "value": "1 1/4"},
+        {"id": "21", "Group": "Frame Size Outside Mount", "name": "1 inch L Frame", "value": "1 L"},
+        {"id": "22", "Group": "Frame Size Outside Mount", "name": "2 inch Frame", "value": "2"},
+        {"id": "23", "Group": "Frame Size Outside Mount", "name": "2 1/2 inch Frame", "value": "2 1/2"}
+    ],
+    [
+        {"id": "24", "Group": "Frame Size Inside Mount", "name": "3/4 inch L Frame", "value": "3/4 L"},
+        {"id": "25", "Group": "Frame Size Inside Mount", "name": "1 inch L Frame", "value": "1 L"},
+        {"id": "26", "Group": "Frame Size Inside Mount", "name": "1 inch Z Frame", "value": "1 Z"},
+        {"id": "27", "Group": "Frame Size Inside Mount", "name": "2 inch Z Frame", "value": "2 Z"},
+        {"id": "28", "Group": "Frame Size Inside Mount", "name": "2 1/2 inch Z Frame", "value": "2 1/2 Z"},
+        {"id": "29", "Group": "Frame Size Inside Mount", "name": "3 inch Z Frame", "value": "3 Z"}
+    ],
+    [
+        {"id": "30", "Group": "Color", "name": "Blanco", "value": "Blanco"},
+        {"id": "31", "Group": "Color", "name": "Pure White", "value": "Pure White"},
+        {"id": "32", "Group": "Color", "name": "Vivid White", "value": "Vivid White"}
+    ],
+    [
+        {"id": "33", "Group": "Rail Length", "name": "4 1/2", "value": "4 1/2"},
+        {"id": "34", "Group": "Rail Length", "name": "5 1/2", "value": "5 1/2"}
+    ],
+    [
+        {"id": "35", "Group": "Divider / Split Option", "name": "Divider", "value": "Divider"},
+        {"id": "36", "Group": "Divider / Split Option", "name": "Split", "value": "Split"}        
+    ],
+    [
+        {"id": "37", "Group": "Divider / Split Option", "name": "50/50", "value": "50/50"},
+        {"id": "38", "Group": "Divider / Split Option", "name": "30/70", "value": "30/70"}
+    ],
+    [
+        {"id": "39", "Group": "Choice", "name": "Shop", "value": "Shop"},
+        {"id": "40", "Group": "Choice", "name": "Standard", "value": "Standard"}
+    ],
+    [
+        {"id": "41", "Group": "Frame", "name": "Normal", "value": "N"},
+        {"id": "42", "Group": "Frame", "name": "Sill Base", "value": "SB"},
+        {"id": "43", "Group": "Frame", "name": "Frame to Frame", "value": "F2F"}
+    ],
+    [
+        {"id": "44", "Group": "Number of Frames", "name": "3 Sides", "value": "3"},
+        {"id": "45", "Group": "Number of Frames", "name": "4 Sides", "value": "4"}
+    ],
+    [
+        {"id": "46", "Group": "Hinge Choice", "name": "Left", "value": "L"},
+        {"id": "47", "Group": "Hinge Choice", "name": "Right", "value": "R"},
+        {"id": "48", "Group": "Hinge Choice", "name": "Left Right", "value": "LR"},
+        {"id": "49", "Group": "Hinge Choice", "name": "2 Left 2 Right", "value": "2F2R"}
+    ]
+]
+
