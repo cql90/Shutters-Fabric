@@ -158,11 +158,7 @@ const MainComponent = () => {
         setDisable(false)
     })  
 
-    const onSubmit = (data, e) => {
-        if(e.nativeEvent.submitter.name == "calculate"){
-            calculate()
-            return
-        }
+    const onSubmit = (data) => {
         let index = dataForTables.length
         const final = {
             id: index,
@@ -415,7 +411,8 @@ const MainComponent = () => {
             <br></br>
             <div>
                 <div className="form-main-button-position">
-                    <button type="submit" name="calculate" >Calculate</button>
+                    {/* <button type="button" onClick={calculate}>Calculate</button> */}
+                    <button type="submit"name >Calculate</button>
                 </div>
                 <div className='form-main-button-position'>
                     <button type="submit" disabled={disable} >Save</button>

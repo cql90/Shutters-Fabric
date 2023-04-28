@@ -415,7 +415,7 @@ const MainComponent = () => {
             <br></br>
             <div>
                 <div className="form-main-button-position">
-                    <button type="submit" name="calculate" >Calculate</button>
+                    <button type="submit"name="calculate" >Calculate</button>
                 </div>
                 <div className='form-main-button-position'>
                     <button type="submit" disabled={disable} >Save</button>
