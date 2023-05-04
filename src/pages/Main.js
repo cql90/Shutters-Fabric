@@ -30,7 +30,7 @@ const MainComponent = () => {
     const[sillWidth, setSillWidth] = useState('')
     const[measurement, setMeasurement] = useState('')
     const[instruction, setInstruction] = useState('')
-    const[hingsChoice, setHingsChoice] = useState('')
+    const[hingeChoice, sethingeChoice] = useState('')
     const[mount, setMount] = useState('')
     const[louver, setLouver] = useState('')
     const[panel, setPanel] = useState('')
@@ -73,8 +73,8 @@ const MainComponent = () => {
         setInstruction(e.currentTarget.value)
     })
 
-    const handleHingsChoiceChange = ((e) => {
-        setHingsChoice(e.currentTarget.value)
+    const handlehingeChoiceChange = ((e) => {
+        sethingeChoice(e.currentTarget.value)
     })
 
     const handleMountChange = ((e) => {
@@ -147,7 +147,7 @@ const MainComponent = () => {
             id: index,
             width: width,
             length: length,
-            hingsChoice: hingsChoice,
+            hingeChoice: hingeChoice,
             panel: panel,
             outsideFrame: outsideFrame,
             insideFrame: insideFrame,
@@ -173,7 +173,7 @@ const MainComponent = () => {
             sillWidth: sillWidth,
             measurement: measurement,
             instruction: instruction,
-            hingsChoice: hingsChoice,
+            hingeChoice: hingeChoice,
             mount: mount,
             louver: louver,
             panel: panel,
@@ -281,7 +281,7 @@ const MainComponent = () => {
                     <div className="div-textbox-main" style={{'marginTop': 0}}>
                     <fieldset>  
                     <legend type="big">Hings Choice</legend>
-                        <RadioButtonComponentExt name="hingsChoice" display="" options={dataMain[16]} selectchange={handleHingsChoiceChange} />
+                        <RadioButtonComponentExt name="hingeChoice" display="" options={dataMain[16]} selectchange={handlehingeChoiceChange} />
                         <div className="div-vertical-spacing-3"></div><div className="div-vertical-spacing"></div>
                     </fieldset>
                     {/* <br></br> */}

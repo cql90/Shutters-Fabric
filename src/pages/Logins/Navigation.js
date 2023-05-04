@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 import {Routes, Route, Link} from "react-router-dom";
 import LoginForm from "./LoginForm"
@@ -14,6 +14,14 @@ import NewOrRetrieveCustomerForm from './NewOrRetrieveCustomerForm';
 
 
 const NavbarComponent = () => {
+  const[info, setInfo] = useState([{
+    company_id: '',
+    sale_man_id: '',
+    customer_id: '',
+    invoice_id: '',
+    customer_name: ''
+  }])
+
   return (
     <div>  
         <Navbar bg="dark" expand="lg" variant={'dark'}>
@@ -38,15 +46,14 @@ const NavbarComponent = () => {
         </div>
         </Navbar>
         <Routes>
-            <Route path="/" element={<LoginForm />}></Route>
-            <Route path="/login" element={<LoginForm />}></Route>
-            <Route path="/customer" element={<CustomerInfoForm />}></Route>
-            <Route path="/order" element={<NewOrRetrieveCustomerForm />}></Route>
-            <Route path="/resetPassword" element={<ResetPasswordForm />}></Route>
+            <Route path="/" element={<LoginForm formInfo={info} formState={setInfo}/>}></Route>
+            <Route path="/login" element={<LoginForm formInfo={info} formState={setInfo}/>}></Route>
+            <Route path="/customer" element={<CustomerInfoForm formInfo={info} formState={setInfo}/>}></Route>
+            <Route path="/order" element={<NewOrRetrieveCustomerForm formInfo={info} formState={setInfo}/>}></Route>
+            <Route path="/resetPassword" element={<ResetPasswordForm formInfo={info} formState={setInfo}/>}></Route>
             <Route path="/validationCode" element={<ValidationCodeForm />}></Route>
-            <Route path="/register" element={<SignupForm />}></Route>
-            <Route path="/signupform" element={<SignupForm />}></Route>
-            <Route path="/home" element={<MainComponent />}></Route>
+            <Route path="/register" element={<SignupForm formInfo={info} formState={setInfo}/>}></Route>
+            <Route path="/home" element={<MainComponent formInfo={info} formState={setInfo}/>}></Route>
             <Route path="/contact" element={<ContactComponent />}></Route>
             <Route path="/about" element={<AboutComponent />}></Route>
         </Routes>         

@@ -1,21 +1,55 @@
 import React from 'react';
 import { Formik, Form, useField, useFormikContext } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 // import "../../style.css";
 // import "../../styleCustom.css";
 import "../../Components/SelectComponent";
 import SelectComponent from '../../Components/SelectComponent';
-import dataSelect from "../../data/dataSelect.json";
 import state from "../../data/dataState.json";
 import TextBoxComponent from "../../Components/TextBoxComponent";
 
 const selectState = JSON.parse(JSON.stringify(state))
-const jobType = JSON.parse(JSON.stringify(dataSelect))
 // const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
 // And now we can use these
-const CustomerInfoForm = () => {  
+const CustomerInfoForm = ({formInfo, formState}) => {  
+  const cusInfo = {
+    sale_man_id: "",
+    customer_name: "",
+    customer_phone: "",
+    customer_address: "", 
+    customer_city: "",
+    customer_state: "",
+    customer_zip_code: "",
+    customer_country: "USA"
+  }
+
+  const saleManInfo = {
+    sale_man_name: "",
+    sale_man_phone: "",
+    company_id: ""
+  }
+
+  const navigate = useNavigate();
+
+  const navigateToMain = () => {
+    navigate('/home');
+  };
+
+  const setFormInfoSaleManId = ((val) => {
+    formState({...formInfo, sale_man_id: val})
+  })
+
+  const setFormInfoCustomerId = ((val) => {
+    formState({...formInfo, customer_id: val})
+  })
+
+  const setFormInfoCustomerName = ((val) => {
+    formState({...formInfo, customer_name: val})
+  })
+
   return (
     <div className="form-login-position">
       <h1>Customer Info!</h1>
@@ -57,7 +91,50 @@ const CustomerInfoForm = () => {
         onSubmit={async (values, { setSubmitting }) => {
           await new Promise(r => setTimeout(r, 10));
           setSubmitting(false);
-          console.log(values)
+          saleManInfo.sale_man_name = values.saleName
+          saleManInfo.sale_man_phone = values.salePhone
+          if( formInfo.company_id === undefined){
+            formInfo.company_id = sessionStorage.getItem('company_id')
+            saleManInfo.company_id = formInfo.company_id
+          }
+          else
+            saleManInfo.company_id = formInfo.company_id
+          
+          const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(saleManInfo)
+          }
+          const data = await fetch('http://127.0.0.1:8000/sale_man', requestOptions)
+          const resSaleMan = await data.json()
+          if(resSaleMan !== undefined) {
+            setFormInfoSaleManId(resSaleMan.sale_man_id)
+            sessionStorage.setItem('sale_man_id', resSaleMan.sale_man_id)
+            cusInfo.customer_name = values.customerName
+            cusInfo.customer_address = values.streetName
+            cusInfo.customer_city = values.cityName
+            cusInfo.customer_state = values.state
+            cusInfo.customer_zip_code = values.zipCode
+            cusInfo.customer_phone = values.customerPhone
+            cusInfo.sale_man_id = resSaleMan.sale_man_id
+            const requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(cusInfo)
+            }
+            const data = await fetch('http://127.0.0.1:8000/customer', requestOptions)
+            const resCustomer = await data.json()
+            if(resCustomer !== undefined) {
+              setFormInfoCustomerId(resCustomer.customer_id)
+              setFormInfoCustomerName(values.customerName)
+              sessionStorage.setItem('customer_name', values.customerName)
+              sessionStorage.setItem('customer_id', resCustomer.customer_id)
+              navigateToMain()
+            }
+          }
+          else{
+            console.log("Error: " + resSaleMan)
+          }
         }}
       >
         <Form>

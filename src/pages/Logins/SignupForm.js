@@ -1,31 +1,52 @@
-import React from 'react';
-import { Formik, Form, useField, useFormikContext } from "formik";
+import React, { useState } from 'react';
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 // import "../../style.css";
 // import "../../styleCustom.css";
 import "../../Components/SelectComponent";
-import SelectComponent from '../../Components/SelectComponent';
-import dataSelect from "../../data/dataSelect.json";
-import dataCheckbox from "../../data/dataCheckbox.json";
 import TextBoxComponent from "../../Components/TextBoxComponent";
 import CheckboxComponent from '../../Components/CheckboxComponent';
-import RadioButtonComponent from '../../Components/RadioButtonComponent';
-import FormatPhoneNumber from '../../utilities/FormatPhoneNumber';
-import {Link, Outlet} from 'react-router-dom'
-
-const jobType = JSON.parse(JSON.stringify(dataSelect))
-const color = JSON.parse(JSON.stringify(dataCheckbox))
-const radioOptions = JSON.parse(JSON.stringify(dataCheckbox))[2]
-const animals = JSON.parse(JSON.stringify(dataCheckbox))[3]
 
 // const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
 // And now we can use these
-const SignupForm = () => {  
+const SignupForm = ({formInfo, formState}) => {  
+  const formValues = {
+    first_name: '',
+    last_name: '',
+    mobile_number: '',
+    company_name: '',
+    user_email: '',
+    user_password: '',
+    user_acceptance: '',
+    company_id: '',
+  }
+
+  const[showError, setShowError] = useState(false)
+
+  const showHideError = ((show) => {
+    setShowError(show)
+  })
+
+  const setCompanyId = ((companyId) => {
+    formValues.company_id = companyId
+  })
+
+  const setFormInfo = ((val) => {
+    formState({...formInfo, company_id: val})
+  })
+
+  const navigate = useNavigate();
+
+  const navigateToLoginForm = () => {
+    navigate('/login');
+  };
+
   return (
     <div className="form-login-position">
-      <h1>Register!</h1>
+      <h1>Register!</h1>{ showError && <h4 style={{color: 'red'}}>The User already registered in the system</h4> }
       <Formik
       initialValues={{
         firstName: "",
@@ -71,10 +92,44 @@ const SignupForm = () => {
             .required("Required")
             .oneOf([true], "You must accept the terms and conditions."),
         })}
+        
         onSubmit={async (values, { setSubmitting }) => {
+          formValues.first_name = values.firstName
+          formValues.last_name = values.lastName
+          formValues.mobile_number = values.phone
+          formValues.company_name = values.companyName
+          formValues.user_email = values.email
+          formValues.user_password = values.password
+          formValues.user_acceptance = values.acceptedTerms
+          showHideError(false)
+
           await new Promise(r => setTimeout(r, 10));
           setSubmitting(false);
-          console.log(values)
+          const resCompany = await fetch('http://127.0.0.1:8000/company_name/' + values.companyName)
+          const data = await resCompany.json()
+          if(data !== undefined) {
+            setCompanyId(data.company_id)
+            sessionStorage.setItem('company_id', data.company_id)
+            setFormInfo(data.company_id)
+            const requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formValues)
+            }
+            console.log(JSON.stringify(formValues))
+            const resUser = await fetch('http://127.0.0.1:8000/user', requestOptions)
+            if(resUser !== undefined) {
+              if(resUser.statusText === "Found"){
+                showHideError(true)
+              }
+              else{
+                showHideError(false)
+                navigateToLoginForm()
+              }
+            }
+            console.log(resUser)
+          }
+          console.log(formValues)
         }}
       >
         <Form>
@@ -95,9 +150,6 @@ const SignupForm = () => {
           <CheckboxComponent name="acceptedTerms">I accept the terms and conditions</CheckboxComponent>
           <br></br>
           <button type="submit">Submit</button>
-          {/* <p className="forgot-password text-right">
-            <Link to={'/forgot'}></Link>
-          </p> */}
         </Form>
         
       </Formik>

@@ -1,19 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TextBoxComponent from "../../Components/TextBoxComponent";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 
-const NewOrRetrieveCustomerForm = () => {  
+const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {  
     const navigate = useNavigate();
+
+    const navigateToMain = () => {
+        navigate('/home');
+    };
+
+    const[showError, setShowError] = useState(false)
+
+    const showHideError = ((show) => {
+        setShowError(show)
+      })
+
+    const setFormInfoCompanyId = ((val, field) => {
+        formState({...formInfo, company_id: val})
+      })
+
+    const setFormInfoCustomerId = ((val) => {
+        formState({...formInfo, customer_id: val})
+    })
+
+    const setFormInfoCustomerName = ((val) => {
+    formState({...formInfo, customer_name: val})
+    })
 
     return (
       <div className="container-fluid">
         <div style={{width: '100%', height: 100}}></div>
         <div style={{width: 500, height: 300, display: 'inline-block'}}></div>
-        <div className="div-order-form" style={{height: 300, display: 'inline-block'}}>
+        <div className="div-order-form" style={{height: 350, display: 'inline-block'}}>
             <div className=" " >
-                <h3>Create new order for this Customer!</h3>
+                <h3>Create new order for this Customer!</h3>{ showError && <h4 style={{color: 'red'}}>Customer wasn't in the system</h4> }
                 <Formik
                     initialValues={{
                     customerName: ""
@@ -26,8 +48,20 @@ const NewOrRetrieveCustomerForm = () => {
                     onSubmit={async (values, { setSubmitting }) => {
                         await new Promise(r => setTimeout(r, 10));
                         setSubmitting(false);
-                        console.log(values)
-                        navigate('/home')
+                        const data = await fetch('http://127.0.0.1:8000/customer_name/' + values.customerName)
+                        const resCustomer = await data.json()
+                        if(data.statusText == 'Not Found'){
+                            showHideError(true)
+                            return
+                        }
+                        if(resCustomer !== undefined) {
+                            setFormInfoCompanyId(resCustomer.company_id)
+                            setFormInfoCustomerId(resCustomer.customer_id)
+                            setFormInfoCustomerName(resCustomer.name)
+                            sessionStorage.setItem('customer_id', resCustomer.customer_id)
+                            sessionStorage.setItem('customer_name', resCustomer.customer_name)
+                            navigateToMain()
+                        }
                     }}
                 >
                 <Form>
