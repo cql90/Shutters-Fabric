@@ -17,16 +17,16 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
         setShowError(show)
       })
 
-    const setFormInfoCompanyId = ((val, field) => {
-        formState({...formInfo, company_id: val})
-      })
-
     const setFormInfoCustomerId = ((val) => {
         formState({...formInfo, customer_id: val})
     })
 
     const setFormInfoCustomerName = ((val) => {
-    formState({...formInfo, customer_name: val})
+        formState({...formInfo, customer_name: val})
+    })
+
+    const setFormInfoSaleManId = ((val) => {
+        formState({...formInfo, sale_man_id: val})
     })
 
     return (
@@ -55,11 +55,12 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
                             return
                         }
                         if(resCustomer !== undefined) {
-                            setFormInfoCompanyId(resCustomer.company_id)
                             setFormInfoCustomerId(resCustomer.customer_id)
-                            setFormInfoCustomerName(resCustomer.name)
+                            setFormInfoCustomerName(resCustomer.customer_name)
+                            setFormInfoSaleManId(resCustomer.sale_man_id)
                             sessionStorage.setItem('customer_id', resCustomer.customer_id)
                             sessionStorage.setItem('customer_name', resCustomer.customer_name)
+                            sessionStorage.setItem('sale_man_id', resCustomer.sale_man_id)
                             navigateToMain()
                         }
                     }}

@@ -14,13 +14,13 @@ import NewOrRetrieveCustomerForm from './NewOrRetrieveCustomerForm';
 
 
 const NavbarComponent = () => {
-  const[info, setInfo] = useState([{
+  const[info, setInfo] = useState({
     company_id: '',
     sale_man_id: '',
     customer_id: '',
     invoice_id: '',
     customer_name: ''
-  }])
+  })
 
   return (
     <div>  

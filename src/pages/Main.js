@@ -14,8 +14,9 @@ import { showInsideOutsideFrame } from '../utilities/ShowHideInsideOutsideFrame'
 import { showHideDividerSplit } from '../utilities/ShowHideDividerSplit'
 
 const dataMain = JSON.parse(JSON.stringify(dataMainForm))
+const fieldNumberOnly =  (/^(([0-9.]?)*)+$/)
 
-const MainComponent = () => {
+const MainComponent = ({formInfo, formState}) => {
     const [showInsideFrame, setShowInsideFrame] = useState(true)
     const [showOutsideFrame, setShowOutsideFrame] = useState(false)
     const [showDividerSplit, setShowDividerSplit] = useState(false)
@@ -45,24 +46,34 @@ const MainComponent = () => {
     const[numOfFrame, setNumOfFrame] = useState('')
     const[disable, setDisable] = useState(true)
 
+    // only allow number and one dot
+    const handleNumberAndDotOnly = ((e) => {
+        e.currentTarget.value = e.currentTarget.value.replace(/[^\d\.]/g, "") .replace(/\./, "x") .replace(/\./g, "") .replace(/x/, ".");
+    })
+
     const handleWidthChange = ((e) => {
         setWidth(e.currentTarget.value)
+        handleNumberAndDotOnly(e)
     })
 
     const handleLengthChange = ((e) => {
         setLength(e.currentTarget.value)
+        handleNumberAndDotOnly(e)
     })
 
     const handleFinishWidthChange = ((e) => {
         setFinishWidth(e.currentTarget.value)
+        handleNumberAndDotOnly(e)
     })
 
     const handleFinishLengthChange = ((e) => {
         setFinisLength(e.currentTarget.value)
+        handleNumberAndDotOnly(e)
     })
 
     const handleSillWidthChange = ((e) => {
         setSillWidth(e.currentTarget.value)
+        handleNumberAndDotOnly(e)
     })
 
     const handleMeasurementChange = ((e) => {
@@ -156,7 +167,7 @@ const MainComponent = () => {
         setDataForTables([...dataForTables, dataTable])
         setShowHideTable(true)
         setDisable(false)
-    })  
+    })    
 
     const onSubmit = (data, e) => {
         if(e.nativeEvent.submitter.name == "calculate"){
@@ -202,7 +213,7 @@ const MainComponent = () => {
                             <div className="div-horizontal-spacing"></div>
                             <TextBoxComponentExt id={dataMain[0][0].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][0].name} name={dataMain[0][0].value} type="text-main" />
                             <div className="div-horizontal-spacing"></div>
-                            <TextBoxComponentExt id={dataMain[0][1].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][1].name} name={dataMain[0][1].value} type="text-main" />
+                            <TextBoxComponentExt id={dataMain[0][1].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][1].name} name={dataMain[0][1].value} type="text-main" value={formInfo.customer_name}/>
                             <div className="div-horizontal-spacing"></div>
                             <TextBoxComponentExt id={dataMain[0][2].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][2].name} name={dataMain[0][2].value} type="text-main" />
                         </fieldset>        

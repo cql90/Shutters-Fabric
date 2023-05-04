@@ -34,7 +34,7 @@ const LoginForm = ({formInfo, formState}) => {
     setShowError(show)
   })
 
-  const setFormInfo = ((val, field) => {
+  const setFormInfoCompanyId = ((val, field) => {
     formState({...formInfo, company_id: val})
   })
 
@@ -72,7 +72,7 @@ const LoginForm = ({formInfo, formState}) => {
             }
             else{
                 showHideError(false)
-                setFormInfo(data.company_id)
+                setFormInfoCompanyId(data.company_id)
                 sessionStorage.setItem('company_id', data.company_id)
                 navigateToCreateNewOrder()
             }
