@@ -42,6 +42,10 @@ const CustomerInfoForm = ({formInfo, formState}) => {
     formState({...formInfo, sale_man_id: val})
   })
 
+  const setFormInfoSaleManName = ((val) => {
+    formState({...formInfo, sale_man_name: val})
+  })
+
   const setFormInfoCustomerId = ((val) => {
     formState({...formInfo, customer_id: val})
   })
@@ -109,7 +113,9 @@ const CustomerInfoForm = ({formInfo, formState}) => {
           const resSaleMan = await data.json()
           if(resSaleMan !== undefined) {
             setFormInfoSaleManId(resSaleMan.sale_man_id)
+            setFormInfoSaleManName(resSaleMan.sale_man_name)
             sessionStorage.setItem('sale_man_id', resSaleMan.sale_man_id)
+            sessionStorage.setItem('sale_man_name', resSaleMan.sale_man_name)
             cusInfo.customer_name = values.customerName
             cusInfo.customer_address = values.streetName
             cusInfo.customer_city = values.cityName

@@ -46,9 +46,21 @@ const MainComponent = ({formInfo, formState}) => {
     const[numOfFrame, setNumOfFrame] = useState('')
     const[disable, setDisable] = useState(true)
 
+    const[customerId, setCustomerId] = useState('')
+    const[customerName, setCustomerName] = useState('')
+    const[saleManId, setSaleManId] = useState('')
+    const[saleManName, setSaleManName] = useState('')
+    const[companyId, setCompanyId] = useState('')
+    const[invoiceId, setInvoiceId] = useState('')
+
     // only allow number and one dot
     const handleNumberAndDotOnly = ((e) => {
         e.currentTarget.value = e.currentTarget.value.replace(/[^\d\.]/g, "") .replace(/\./, "x") .replace(/\./g, "") .replace(/x/, ".");
+    })
+
+    const handleInvoiceChange = ((e) => {
+        setInvoiceId(e.currentTarget.value)
+        sessionStorage.setItem('invoice_id', e.currentTarget.value)
     })
 
     const handleWidthChange = ((e) => {
@@ -137,10 +149,60 @@ const MainComponent = ({formInfo, formState}) => {
     const handleNumOfFrameChange = ((e) => {
         setNumOfFrame(e.currentTarget.value)
     })
+
+    const setFormInfoSaleManId = (() => {
+        setSaleManId(sessionStorage.getItem('sale_man_id'))
+    })
+
+    const setFormInfoSaleManName = (() => {
+        setSaleManName(sessionStorage.getItem('sale_man_name'))
+    })
     
+      const setFormInfoCustomerId = (() => {
+        setCustomerId(sessionStorage.getItem('customer_id'))
+    })
+    
+    const setFormInfoCustomerName = (() => {
+        setCustomerName(sessionStorage.getItem('customer_name'))
+    })
+
+    const setFormInfoInvoiceId = (() => {
+        setInvoiceId(sessionStorage.getItem('invoice_id'))
+    })
+
+    const setFormInfoCompanyId = (() => {
+        setCompanyId(sessionStorage.getItem('company_id'))
+    })
+    
+    useEffect(() => {
+        setFormInfoSaleManId()
+        setFormInfoSaleManName()
+        setFormInfoCustomerId()
+        setFormInfoCustomerName()
+        setFormInfoCompanyId()
+        setFormInfoInvoiceId()
+    }, [])
+
+    // useEffect(() => {
+    //     setFormInfoSaleManName()
+    // }, [])
+
+    // useEffect(() => {
+    //     setFormInfoCustomerId()
+    // }, [])
+
+    // useEffect(() => {
+    //     setFormInfoCustomerName()
+    // }, [])
+
     const initialValues = {
         dividerSplitSize: ""
-      };
+    };
+
+    const OrderInfo = {
+        invoice_id: "",
+        customer_id: ""
+    }
 
     const {
         register,
@@ -169,11 +231,25 @@ const MainComponent = ({formInfo, formState}) => {
         setDisable(false)
     })    
 
-    const onSubmit = (data, e) => {
+    const onSubmit =  (data, e) => {
         if(e.nativeEvent.submitter.name == "calculate"){
             calculate()
             return
         }
+        // check if invoice already existed
+        OrderInfo.invoice_id = data.invoice_id
+        OrderInfo.customer_id = sessionStorage.getItem("customer_id")
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(OrderInfo)
+        }
+        const dataFetch = fetch('http://127.0.0.1:8000/order_existed', requestOptions)
+        const resOrder = dataFetch.json()
+        if(resOrder !== undefined) {
+            console.log(resOrder)
+        }
+        // 
         let index = dataForTables.length
         const final = {
             id: index,
@@ -211,11 +287,15 @@ const MainComponent = ({formInfo, formState}) => {
                     <div className="form-main-position">
                         <fieldset type="customer">
                             <div className="div-horizontal-spacing"></div>
-                            <TextBoxComponentExt id={dataMain[0][0].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][0].name} name={dataMain[0][0].value} type="text-main" />
+                            <div className="classdiv div-parent" >
+                                <label className="label-main-small">Invoice</label>
+                                <input id={dataMain[0][0].id} classdiv="div-textbox-main" {...register("invoiceNumber", { required: true })} name="invoiceNumber" type="text-main" 
+                                onChange={handleInvoiceChange}/>
+                            </div>
                             <div className="div-horizontal-spacing"></div>
-                            <TextBoxComponentExt id={dataMain[0][1].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][1].name} name={dataMain[0][1].value} type="text-main" value={formInfo.customer_name}/>
+                            <TextBoxComponentExt id={dataMain[0][1].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][1].name} name={dataMain[0][1].value} type="text-main" value={customerName}/>
                             <div className="div-horizontal-spacing"></div>
-                            <TextBoxComponentExt id={dataMain[0][2].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][2].name} name={dataMain[0][2].value} type="text-main" />
+                            <TextBoxComponentExt id={dataMain[0][2].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][2].name} name={dataMain[0][2].value} type="text-main" value={saleManName}/>
                         </fieldset>        
                     </div>
                 </div>    

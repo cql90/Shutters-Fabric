@@ -1,5 +1,5 @@
 import React from "react"
-import { useField, getIn } from "formik"
+import { useField } from "formik"
 
 function setStyle(error) {
   if (error) {

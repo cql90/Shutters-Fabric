@@ -49,6 +49,10 @@ input[type="text-main"]
   appearance: none;
 }
 
+input[type="text-main"]:focus {
+  border: 2px solid red !important;
+}
+
 input[type="text-main-small"]
 {
   width: 100px;

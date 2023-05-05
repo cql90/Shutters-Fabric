@@ -29,6 +29,10 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
         formState({...formInfo, sale_man_id: val})
     })
 
+    const setFormInfoSaleManName = ((val) => {
+        formState({...formInfo, sale_man_name: val})
+    })
+
     return (
       <div className="container-fluid">
         <div style={{width: '100%', height: 100}}></div>
@@ -61,6 +65,12 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
                             sessionStorage.setItem('customer_id', resCustomer.customer_id)
                             sessionStorage.setItem('customer_name', resCustomer.customer_name)
                             sessionStorage.setItem('sale_man_id', resCustomer.sale_man_id)
+                            const dataSaleMan = await fetch('http://127.0.0.1:8000/sale/' + resCustomer.sale_man_id)
+                            const resSaleMan = await dataSaleMan.json()
+                            if(resSaleMan !== undefined){
+                                setFormInfoSaleManName(resSaleMan.sale_man_name)
+                                sessionStorage.setItem("sale_man_name", resSaleMan.sale_man_name)
+                            }
                             navigateToMain()
                         }
                     }}
