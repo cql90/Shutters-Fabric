@@ -52,6 +52,7 @@ const MainComponent = ({formInfo, formState}) => {
     const[saleManName, setSaleManName] = useState('')
     const[companyId, setCompanyId] = useState('')
     const[invoiceId, setInvoiceId] = useState('')
+    const[showError, setShowError] = useState(false)
 
     // only allow number and one dot
     const handleNumberAndDotOnly = ((e) => {
@@ -194,7 +195,10 @@ const MainComponent = ({formInfo, formState}) => {
     // useEffect(() => {
     //     setFormInfoCustomerName()
     // }, [])
-
+  
+    const showHideError = ((show) => {
+      setShowError(show)
+    })
     const initialValues = {
         dividerSplitSize: ""
     };
@@ -231,23 +235,30 @@ const MainComponent = ({formInfo, formState}) => {
         setDisable(false)
     })    
 
-    const onSubmit =  (data, e) => {
-        if(e.nativeEvent.submitter.name == "calculate"){
-            calculate()
-            return
-        }
-        // check if invoice already existed
-        OrderInfo.invoice_id = data.invoice_id
-        OrderInfo.customer_id = sessionStorage.getItem("customer_id")
+    
+
+    const fetchOrder = async () => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(OrderInfo)
         }
-        const dataFetch = fetch('http://127.0.0.1:8000/order_existed', requestOptions)
-        const resOrder = dataFetch.json()
-        if(resOrder !== undefined) {
-            console.log(resOrder)
+        const res = await fetch('http://127.0.0.1:8000/order_existed', requestOptions)
+        const data = await res.json()
+        return data
+      }
+
+    const onSubmit = async  (data, e) => {
+        if(e.nativeEvent.submitter.name == "calculate"){
+            calculate()
+            return
+        }
+        // check if invoice already existed
+        OrderInfo.invoice_id = invoiceId
+        OrderInfo.customer_id = sessionStorage.getItem("customer_id")
+        const resOrder = await fetchOrder()
+        if(resOrder !== undefined && resOrder.detail) {
+            setShowError(true)
         }
         // 
         let index = dataForTables.length
@@ -275,7 +286,6 @@ const MainComponent = ({formInfo, formState}) => {
             numOfFrame: numOfFrame
         }
         setFinalData([...finalData, final])
-        setDisable(true)
     };  
 
     return (  
@@ -513,6 +523,7 @@ const MainComponent = ({formInfo, formState}) => {
                 </div>   
             </div>  
             </form>
+            { showError && <div style={{marginLeft: 40}}><h4 style={{color: 'red'}}>Invoice already in database</h4></div> }
             { showHideTable && <TableDetailMain options={dataForTables} setdatafortable={setDataForTables} showHideTable={setShowHideTable} setButtonDisable={setDisable} ></TableDetailMain> }
             <br></br>
             <br></br>
