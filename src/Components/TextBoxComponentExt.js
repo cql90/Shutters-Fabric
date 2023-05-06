@@ -4,7 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import "../style.css";
 import "../styleCustom.css";
 
-const TextBoxComponentExt = ({ inputName, label, ...props }) => {
+const TextBoxComponentExt = ({ inputName, label, fieldvalue, ...props }) => {
   const {textchange} = props;
 
   const textChange = (e) => {
@@ -20,7 +20,7 @@ const TextBoxComponentExt = ({ inputName, label, ...props }) => {
     <>  
       <div className={props.classdiv} style={{display: 'inline-block'}}>
         <Form.Label className={props.classlabel}>{label}</Form.Label>
-        <input type="text" name={inputName} className="text-input" {...props} onChange={textChange}/>
+        <input type="text" name={inputName} className="text-input" value={fieldvalue} {...props} onChange={textChange}/>
         {errors.width && <p>{errors.width.message}</p>}
       </div>  
     </>

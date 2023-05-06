@@ -9,8 +9,7 @@ function setStyle(error) {
 
 const TextBoxComponent = ({ label, ...props }) => {
   const [field, meta] = useField(props);
-  const a = props.name;
-  const errors = {'a': "required"};
+
   return (
     <>  
     <div className={props.classdiv}>

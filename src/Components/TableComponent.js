@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { swapArrayDown } from '../utilities/SwapArrayDown';
 import { swapArrayUp } from '../utilities/SwapArrayUp';
-import { deleteItemStateObject } from '../utilities/DeleteItemStateObject';
+import { deleteItemStateObject, deleteOrderStateObject } from '../utilities/DeleteItemStateObject';
 
   const TableDetailMain = (props) => {
-    const { options, setdatafortable, showHideTable, setButtonDisable } = props;
+    const { options, setdatafortable, optionorders, setdatafororder, showHideTable, setButtonDisable } = props;
     
     const onChange = (e, index) => {
       if(e.currentTarget.id === "up")
@@ -12,7 +12,8 @@ import { deleteItemStateObject } from '../utilities/DeleteItemStateObject';
       else if(e.currentTarget.id === "down")
         swapArrayDown(index, options, setdatafortable)
       else{
-        deleteItemStateObject(index, options, setdatafortable, ShowHideTable, DisableSaveButton)        
+        deleteItemStateObject(index, options, setdatafortable, ShowHideTable, DisableSaveButton)     
+        deleteOrderStateObject(index, optionorders, setdatafororder)   
       }
     }
 

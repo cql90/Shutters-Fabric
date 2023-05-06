@@ -22,7 +22,7 @@ const MainComponent = ({formInfo, formState}) => {
     const [showDividerSplit, setShowDividerSplit] = useState(false)
     const [showHideTable, setShowHideTable] = useState(false)
     const [dataForTables, setDataForTables] = useState([])
-    const [finalData, setFinalData] = useState([])
+    const [dataOrders, setDataForOrders] = useState([])
 
     const[width, setWidth] = useState('')
     const[length, setLength] = useState('')
@@ -54,6 +54,18 @@ const MainComponent = ({formInfo, formState}) => {
     const[invoiceId, setInvoiceId] = useState('')
     const[showError, setShowError] = useState(false)
 
+    // update single field in the array of object
+    const updateInvoiceValue = ((newValue) => {
+        const newDataOrders = dataOrders.map(dataOrder => {
+            // Return new dataOrder
+            return {
+                ...dataOrder,
+                invoice_id: newValue
+            };
+          });
+          // updated old array with the new array
+          setDataForOrders(newDataOrders);
+    })
     // only allow number and one dot
     const handleNumberAndDotOnly = ((e) => {
         e.currentTarget.value = e.currentTarget.value.replace(/[^\d\.]/g, "") .replace(/\./, "x") .replace(/\./g, "") .replace(/x/, ".");
@@ -62,6 +74,7 @@ const MainComponent = ({formInfo, formState}) => {
     const handleInvoiceChange = ((e) => {
         setInvoiceId(e.currentTarget.value)
         sessionStorage.setItem('invoice_id', e.currentTarget.value)
+        updateInvoiceValue(e.currentTarget.value)
     })
 
     const handleWidthChange = ((e) => {
@@ -183,19 +196,7 @@ const MainComponent = ({formInfo, formState}) => {
         setFormInfoCompanyId()
         setFormInfoInvoiceId()
     }, [])
-
-    // useEffect(() => {
-    //     setFormInfoSaleManName()
-    // }, [])
-
-    // useEffect(() => {
-    //     setFormInfoCustomerId()
-    // }, [])
-
-    // useEffect(() => {
-    //     setFormInfoCustomerName()
-    // }, [])
-  
+ 
     const showHideError = ((show) => {
       setShowError(show)
     })
@@ -218,7 +219,28 @@ const MainComponent = ({formInfo, formState}) => {
         }
       });
 
-    const calculate = (() => {
+    const checkOrderExisted = async () => {
+        OrderInfo.invoice_id = invoiceId
+        OrderInfo.customer_id = customerId
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(OrderInfo)
+        }
+        const data = await fetch('http://127.0.0.1:8000/order_existed', requestOptions)
+        const res = await data.json()
+        return res
+    }  
+
+    const calculate = (async () => {
+        // check if invoice already existed
+        const resCheck = await checkOrderExisted()
+        // if resOrder.detail is valid, it means the invoice_id already in database
+        if(resCheck !== undefined && resCheck.detail) {
+            setShowError(true)
+            return
+        }
+        setShowError(false)
         let index = dataForTables.length
         const dataTable = {
             id: index,
@@ -230,40 +252,11 @@ const MainComponent = ({formInfo, formState}) => {
             insideFrame: insideFrame,
             numOfFrame: numOfFrame
         }
-        setDataForTables([...dataForTables, dataTable])
-        setShowHideTable(true)
-        setDisable(false)
-    })    
-
-    
-
-    const fetchOrder = async () => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(OrderInfo)
-        }
-        const res = await fetch('http://127.0.0.1:8000/order_existed', requestOptions)
-        const data = await res.json()
-        return data
-      }
-
-    const onSubmit = async  (data, e) => {
-        if(e.nativeEvent.submitter.name == "calculate"){
-            calculate()
-            return
-        }
-        // check if invoice already existed
-        OrderInfo.invoice_id = invoiceId
-        OrderInfo.customer_id = sessionStorage.getItem("customer_id")
-        const resOrder = await fetchOrder()
-        if(resOrder !== undefined && resOrder.detail) {
-            setShowError(true)
-        }
-        // 
-        let index = dataForTables.length
-        const final = {
+        const dataOrder = {
             id: index,
+            invoice_id: invoiceId,
+            sale_man_id: saleManId,
+            customer_id: customerId,
             width: width,
             length: length,
             finishWidth: finishWidth,
@@ -281,11 +274,36 @@ const MainComponent = ({formInfo, formState}) => {
             rail: rail,
             dividerSplitOption: dividerSplitOption,
             dividerSplitSize: dividerSplitSize,
-            choice, choice,
+            choice: choice,
             frame: frame,
             numOfFrame: numOfFrame
         }
-        setFinalData([...finalData, final])
+        setDataForTables([...dataForTables, dataTable])
+        setDataForOrders([...dataOrders, dataOrder])
+        setShowHideTable(true)
+        setDisable(false)
+    })    
+
+    const sendOrders = async () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataOrders)
+        }
+        const data = await fetch('http://127.0.0.1:8000/order', requestOptions)
+        const resOrders = await data.json()
+        return resOrders
+    }
+
+    const onSubmit = async  (data, e) => {
+        if(e.nativeEvent.submitter.name == "calculate"){
+            calculate()
+            return
+        }
+        setShowError(false)
+        // send orders to server endpoint
+        const resOrders = await sendOrders()
+        console.log(resOrders)
     };  
 
     return (  
@@ -303,9 +321,9 @@ const MainComponent = ({formInfo, formState}) => {
                                 onChange={handleInvoiceChange}/>
                             </div>
                             <div className="div-horizontal-spacing"></div>
-                            <TextBoxComponentExt id={dataMain[0][1].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][1].name} name={dataMain[0][1].value} type="text-main" value={customerName}/>
+                            <TextBoxComponentExt id={dataMain[0][1].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][1].name} name={dataMain[0][1].value} type="text-main" fieldvalue={customerName}/>
                             <div className="div-horizontal-spacing"></div>
-                            <TextBoxComponentExt id={dataMain[0][2].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][2].name} name={dataMain[0][2].value} type="text-main" value={saleManName}/>
+                            <TextBoxComponentExt id={dataMain[0][2].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][2].name} name={dataMain[0][2].value} type="text-main" fieldvalue={saleManName}/>
                         </fieldset>        
                     </div>
                 </div>    
@@ -524,7 +542,7 @@ const MainComponent = ({formInfo, formState}) => {
             </div>  
             </form>
             { showError && <div style={{marginLeft: 40}}><h4 style={{color: 'red'}}>Invoice already in database</h4></div> }
-            { showHideTable && <TableDetailMain options={dataForTables} setdatafortable={setDataForTables} showHideTable={setShowHideTable} setButtonDisable={setDisable} ></TableDetailMain> }
+            { showHideTable && <TableDetailMain options={dataForTables} setdatafortable={setDataForTables} optionorders={dataOrders} setdatafororder={setDataForOrders} showHideTable={setShowHideTable} setButtonDisable={setDisable} ></TableDetailMain> }
             <br></br>
             <br></br>
         </div>
