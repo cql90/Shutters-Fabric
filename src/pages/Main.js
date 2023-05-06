@@ -53,6 +53,7 @@ const MainComponent = ({formInfo, formState}) => {
     const[companyId, setCompanyId] = useState('')
     const[invoiceId, setInvoiceId] = useState('')
     const[showError, setShowError] = useState(false)
+    const[newInvoice, setNewInvoice] = useState(false)
 
     // update single field in the array of object
     const updateInvoiceValue = ((newValue) => {
@@ -209,6 +210,19 @@ const MainComponent = ({formInfo, formState}) => {
         customer_id: ""
     }
 
+    const InvoiceInfo = {
+        invoice_id: "",
+        customer_id: "",
+        sale_man_id: ""
+    }
+
+    const setInvoiceInfo = (() => {
+        InvoiceInfo.invoice_id = invoiceId
+        InvoiceInfo.customer_id = customerId
+        InvoiceInfo.sale_man_id = saleManId
+        return InvoiceInfo
+    })
+
     const {
         register,
         handleSubmit,
@@ -236,9 +250,11 @@ const MainComponent = ({formInfo, formState}) => {
         // check if invoice already existed
         const resCheck = await checkOrderExisted()
         // if resOrder.detail is valid, it means the invoice_id already in database
-        if(resCheck !== undefined && resCheck.detail) {
-            setShowError(true)
-            return
+        if(!newInvoice){
+            if(resCheck !== undefined && resCheck.detail) {
+                setShowError(true)
+                return
+            }
         }
         setShowError(false)
         let index = dataForTables.length
@@ -295,15 +311,37 @@ const MainComponent = ({formInfo, formState}) => {
         return resOrders
     }
 
+    const createInvoice = async () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(setInvoiceInfo())
+        }
+        const data = await fetch('http://127.0.0.1:8000/invoice_object', requestOptions)
+        const resInvoice = await data.json()
+        return resInvoice
+    }
+
     const onSubmit = async  (data, e) => {
         if(e.nativeEvent.submitter.name == "calculate"){
             calculate()
             return
         }
-        setShowError(false)
-        // send orders to server endpoint
-        const resOrders = await sendOrders()
-        console.log(resOrders)
+        const resCheck = await checkOrderExisted()
+        // if resOrder.detail is Not Found, it means the invoice_id need to create
+        if(resCheck !== undefined && resCheck.detail === undefined) {
+            const resInvoice = createInvoice()
+            if(resInvoice !== undefined ){
+                setNewInvoice(true)
+                // Save new Order, send orders to server endpoint
+                setTimeout(() => {
+                    const resOrders = sendOrders()
+                    console.log(resOrders)
+                }, 100);
+                // const resOrders = await sendOrders()
+                console.log(resInvoice)
+            }
+        }
     };  
 
     return (  
