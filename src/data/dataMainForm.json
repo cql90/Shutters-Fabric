@@ -81,7 +81,7 @@
         {"id": "46", "Group": "Hinge Choice", "name": "Left", "value": "L"},
         {"id": "47", "Group": "Hinge Choice", "name": "Right", "value": "R"},
         {"id": "48", "Group": "Hinge Choice", "name": "Left Right", "value": "LR"},
-        {"id": "49", "Group": "Hinge Choice", "name": "2 Left 2 Right", "value": "2F2R"}
+        {"id": "49", "Group": "Hinge Choice", "name": "2 Left 2 Right", "value": "2L2R"}
     ]
 ]
 
