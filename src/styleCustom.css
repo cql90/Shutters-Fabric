@@ -268,6 +268,18 @@ legend[type="max"] {
   display: inline-block;
 }
 
+.div-vertical-spacing-9 {
+  height: 18px;
+  width: 10px;
+  display: inline-block;
+}
+
+.div-vertical-spacing-10 {
+  height: 38px;
+  width: 10px;
+  display: inline-block;
+}
+
 .div-spacing-between-rows {
   height: 0;
   width: '100%';

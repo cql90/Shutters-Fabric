@@ -520,8 +520,8 @@ const MainComponent = ({formInfo, formState}) => {
                         <fieldset>  
                         <legend type="max">Divider/Split Option</legend>
                             <RadioButtonComponentExt name="dividerSplitOption" display="" options={dataMain[11]} selectchange={handleDividerSplitOptionChange} />
-                            <div className="div-vertical-spacing"></div>
-                            <div className="div-vertical-spacing-6"></div>
+                            {/* <div className="div-vertical-spacing"></div> */}
+                            <div className="div-vertical-spacing-9"></div>
                         </fieldset>
                         </div>
                     {/* Divider Spit Side */}
@@ -529,11 +529,11 @@ const MainComponent = ({formInfo, formState}) => {
                         <fieldset>  
                         <legend type="max">Divider/Split Size</legend>
                             <Form.Check type="radio" name="dividerSplitSize" value="50/50" label="50/50" {...register("dividerSplitSize", {
-                                required: "Please select your gender"})} onChange={handleDividerSplitSizeChange} />
+                                required: "Please select your gender"})} onChange={handleDividerSplitSizeChange} /> 
                             <Form.Check type="radio" name="dividerSplitSize" value="30/70" label="30/70" {...register("dividerSplitSize", {
                                 required: "Please select your gender"})} onChange={handleDividerSplitSizeChange} />
                             <div className="div-vertical-spacing"></div>
-                            <div className="div-vertical-spacing-6"></div>
+                            <div className="div-vertical-spacing-10"></div>
                         </fieldset>
                         </div> }
                     {/* Choice */}

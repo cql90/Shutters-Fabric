@@ -25,6 +25,7 @@ const RadioButtonComponentExt = (props) => {
         frame: "normal",
         numOfFrame: "4",
         hingsChoice: checkedoption,
+        dividerSplitOption: "None",
         dividerSplitSize: ""
     };
 
@@ -43,6 +44,7 @@ const RadioButtonComponentExt = (props) => {
                 frame: initialValues.frame,
                 numOfFrame: initialValues.numOfFrame,
                 hingsChoice: initialValues.hingsChoice,
+                dividerSplitOption: initialValues.dividerSplitOption,
                 dividerSplitSize: initialValues.dividerSplitSize
             }
     });

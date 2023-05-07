@@ -1,5 +1,5 @@
 export function  showHideDividerSplit(controlName, stateSplit){
-    if( controlName === 'Split'){
+    if( controlName !== 'None'){
         stateSplit(true)
     }
     else {

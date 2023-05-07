@@ -58,30 +58,31 @@
     ],
     [
         {"id": "35", "Group": "Divider / Split Option", "name": "Divider", "value": "Divider"},
-        {"id": "36", "Group": "Divider / Split Option", "name": "Split", "value": "Split"}        
+        {"id": "36", "Group": "Divider / Split Option", "name": "Split", "value": "Split"},
+        {"id": "37", "Group": "Divider / Split Option", "name": "None", "value": "None"}       
     ],
     [
-        {"id": "37", "Group": "Divider / Split Option", "name": "50/50", "value": "50/50"},
-        {"id": "38", "Group": "Divider / Split Option", "name": "30/70", "value": "30/70"}
+        {"id": "38", "Group": "Divider / Split Option", "name": "50/50", "value": "50/50"},
+        {"id": "39", "Group": "Divider / Split Option", "name": "30/70", "value": "30/70"}
     ],
     [
-        {"id": "39", "Group": "Choice", "name": "Shop", "value": "Shop"},
-        {"id": "40", "Group": "Choice", "name": "Standard", "value": "Standard"}
+        {"id": "40", "Group": "Choice", "name": "Shop", "value": "Shop"},
+        {"id": "41", "Group": "Choice", "name": "Standard", "value": "Standard"}
     ],
     [
-        {"id": "41", "Group": "Frame", "name": "Normal", "value": "N"},
-        {"id": "42", "Group": "Frame", "name": "Sill Base", "value": "SB"},
-        {"id": "43", "Group": "Frame", "name": "Frame to Frame", "value": "F2F"}
+        {"id": "42", "Group": "Frame", "name": "Normal", "value": "N"},
+        {"id": "43", "Group": "Frame", "name": "Sill Base", "value": "SB"},
+        {"id": "44", "Group": "Frame", "name": "Frame to Frame", "value": "F2F"}
     ],
     [
-        {"id": "44", "Group": "Number of Frames", "name": "3 Sides", "value": "3"},
-        {"id": "45", "Group": "Number of Frames", "name": "4 Sides", "value": "4"}
+        {"id": "45", "Group": "Number of Frames", "name": "3 Sides", "value": "3"},
+        {"id": "46", "Group": "Number of Frames", "name": "4 Sides", "value": "4"}
     ],
     [
-        {"id": "46", "Group": "Hinge Choice", "name": "Left", "value": "L"},
-        {"id": "47", "Group": "Hinge Choice", "name": "Right", "value": "R"},
-        {"id": "48", "Group": "Hinge Choice", "name": "Left Right", "value": "LR"},
-        {"id": "49", "Group": "Hinge Choice", "name": "2 Left 2 Right", "value": "2L2R"}
+        {"id": "47", "Group": "Hinge Choice", "name": "Left", "value": "L"},
+        {"id": "48", "Group": "Hinge Choice", "name": "Right", "value": "R"},
+        {"id": "49", "Group": "Hinge Choice", "name": "Left Right", "value": "LR"},
+        {"id": "50", "Group": "Hinge Choice", "name": "2 Left 2 Right", "value": "2L2R"}
     ]
 ]
 
