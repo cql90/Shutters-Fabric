@@ -45,6 +45,7 @@ const MainComponent = ({formInfo, formState}) => {
     const[frame, setFrame] = useState('')
     const[numOfFrame, setNumOfFrame] = useState('')
     const[disable, setDisable] = useState(true)
+    const[disableInvoiceField, setDisableInvoiceField] = useState(false)
 
     const[customerId, setCustomerId] = useState('')
     const[customerName, setCustomerName] = useState('')
@@ -63,7 +64,7 @@ const MainComponent = ({formInfo, formState}) => {
                 ...dataOrder,
                 invoice_id: newValue
             };
-          });
+        });
           // updated old array with the new array
           setDataForOrders(newDataOrders);
     })
@@ -342,6 +343,7 @@ const MainComponent = ({formInfo, formState}) => {
                 console.log(resInvoice)
             }
         }
+        setDisableInvoiceField(true)
     };  
 
     return (  
@@ -355,7 +357,7 @@ const MainComponent = ({formInfo, formState}) => {
                             <div className="div-horizontal-spacing"></div>
                             <div className="classdiv div-parent" >
                                 <label className="label-main-small">Invoice</label>
-                                <input id={dataMain[0][0].id} classdiv="div-textbox-main" {...register("invoiceNumber", { required: true })} name="invoiceNumber" type="text-main" 
+                                <input id={dataMain[0][0].id} classdiv="div-textbox-main" {...register("invoiceNumber", { required: true })} name="invoiceNumber" type="text-main" disabled={disableInvoiceField} 
                                 onChange={handleInvoiceChange}/>
                             </div>
                             <div className="div-horizontal-spacing"></div>

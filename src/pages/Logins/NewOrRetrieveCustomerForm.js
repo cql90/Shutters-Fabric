@@ -5,33 +5,57 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 
 const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {  
+    const customerCompany = {
+        company_id: "",
+        customer_name: ""
+    }
+
+    // const[customerInfos, setCustomerInfo] = useState([])
+
+    // const customerInfo = {
+    //     invoice_id: "", 
+    //     customer_id: "", 
+    //     customer_name: "",
+    //     sale_man_id: "",
+    //     sale_man_name: "",
+    //     customer_phone: "",
+    //     customer_address: "",
+    //     customer_city: "",
+    //     customer_state: "",
+    //     customer_zip_code: "",
+    //     customer_country: "", 
+    // }
+    
+    // const mappingCustomerInfo = (custInfo, custObjects, custInfos, setCustInfo) => {
+    //     const newCustInfos = custObjects.map(custObject => {
+    //         return {
+    //             invoice_id: custObject.invoice_id, 
+    //             customer_id: custObject.customer_id,
+    //             customer_name: custObject.customer_name,
+    //             sale_man_id: custObject.sale_man_id,
+    //             sale_man_name: custObject.sale_man_name,
+    //             customer_phone: custObject.customer_phone,
+    //             customer_address: custObject.customer_address,
+    //             customer_city: custObject.customer_city,
+    //             customer_state: custObject.customer_state,
+    //             customer_zip_code: custObject.customer_zip_code,
+    //             customer_country: custObject.customer_country
+    //         };
+    //     });
+    //     sessionStorage.setItem('customer_info', JSON.stringify(newCustInfos))
+    // }
+
     const navigate = useNavigate();
 
-    const navigateToMain = () => {
-        navigate('/home');
+    const navigateToCustomerInvoice = () => {
+        navigate('/customerinvoice');
     };
 
     const[showError, setShowError] = useState(false)
 
     const showHideError = ((show) => {
-        setShowError(show)
+        // setShowError(show)
       })
-
-    const setFormInfoCustomerId = ((val) => {
-        formState({...formInfo, customer_id: val})
-    })
-
-    const setFormInfoCustomerName = ((val) => {
-        formState({...formInfo, customer_name: val})
-    })
-
-    const setFormInfoSaleManId = ((val) => {
-        formState({...formInfo, sale_man_id: val})
-    })
-
-    const setFormInfoSaleManName = ((val) => {
-        formState({...formInfo, sale_man_name: val})
-    })
 
     return (
       <div className="container-fluid">
@@ -52,6 +76,7 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
                     onSubmit={async (values, { setSubmitting }) => {
                         await new Promise(r => setTimeout(r, 10));
                         setSubmitting(false);
+                        // make sure Customer existed in database first then make second call to retrieve customer and invoice
                         const data = await fetch('http://127.0.0.1:8000/customer_name/' + values.customerName)
                         const resCustomer = await data.json()
                         if(data.statusText == 'Not Found'){
@@ -59,19 +84,34 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
                             return
                         }
                         if(resCustomer !== undefined) {
-                            setFormInfoCustomerId(resCustomer.customer_id)
-                            setFormInfoCustomerName(resCustomer.customer_name)
-                            setFormInfoSaleManId(resCustomer.sale_man_id)
-                            sessionStorage.setItem('customer_id', resCustomer.customer_id)
-                            sessionStorage.setItem('customer_name', resCustomer.customer_name)
-                            sessionStorage.setItem('sale_man_id', resCustomer.sale_man_id)
-                            const dataSaleMan = await fetch('http://127.0.0.1:8000/sale/' + resCustomer.sale_man_id)
-                            const resSaleMan = await dataSaleMan.json()
-                            if(resSaleMan !== undefined){
-                                setFormInfoSaleManName(resSaleMan.sale_man_name)
-                                sessionStorage.setItem("sale_man_name", resSaleMan.sale_man_name)
+                            customerCompany.company_id = sessionStorage.getItem("company_id")
+                            customerCompany.customer_name = values.customerName
+                            // make this call to retrieve Customer and invoice information
+                            const requestOptions = {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(customerCompany)
                             }
-                            navigateToMain()
+                            const data = await fetch('http://127.0.0.1:8000/customer_invoice', requestOptions)
+                            const resCustomerInvoice = await data.json()
+                            if(resCustomerInvoice !== undefined){
+                                sessionStorage.setItem('customer_invoice', JSON.stringify(resCustomerInvoice))
+                                navigateToCustomerInvoice()
+                            }    
+                            // set all fields to reuse later
+                            // setFormInfoCustomerId(resCustomer.customer_id)
+                            // setFormInfoCustomerName(resCustomer.customer_name)
+                            // setFormInfoSaleManId(resCustomer.sale_man_id)
+                            // sessionStorage.setItem('customer_id', resCustomer.customer_id)
+                            // sessionStorage.setItem('customer_name', resCustomer.customer_name)
+                            // sessionStorage.setItem('sale_man_id', resCustomer.sale_man_id)
+                            // const dataSaleMan = await fetch('http://127.0.0.1:8000/sale/' + resCustomer.sale_man_id)
+                            // const resSaleMan = await dataSaleMan.json()
+                            // if(resSaleMan !== undefined){
+                            //     setFormInfoSaleManName(resSaleMan.sale_man_name)
+                            //     sessionStorage.setItem("sale_man_name", resSaleMan.sale_man_name)
+                            // }
+                            // navigateToCustomerInvoice()
                         }
                     }}
                 >

@@ -468,9 +468,9 @@ c
   
   th,
   td {
-    padding: 0.5rem 0.5rem 0.5rem 0;
+    padding: 0.5rem 1rem 0.5rem 1rem;
     margin: 0;
-    width: 6rem;
+    width: 8rem;
     border: 2px solid lightgray;
   }
   
@@ -481,17 +481,27 @@ c
     border-bottom: 1px solid black;
     /* color: var(--gray-300); */
     text-align: center;
-  }
+    font-family: serif;
+    font-size: 1.5rem;
+}
+
+table label{
+  cursor: pointer;
+}
 
 td {
     width: 1%;
     white-space:nowrap;
+    cursor: pointer;
 }
 
 tr td:last-child {
     width: 1%;
     white-space: nowrap;
 }
+
+tr:nth-child(even) {background: #CCC}
+tr:nth-child(odd) {background: #FFF}
   
   @media (prefers-color-scheme: dark) {
     th {
@@ -652,6 +662,15 @@ tr td:last-child {
     margin-left: 500px;
   }
 
+  #divCustomerInvoice{
+    position: relative;
+    top: 10%;
+    left: 10%;
+    /* margin-top: -50px;
+    margin-left: -50px; */
+    width: 100px;
+    height: 100px;
+  }​
   .form-main-position{
     margin-left: 30px;
   }
