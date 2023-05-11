@@ -1,10 +1,13 @@
 import React from 'react';
 
   const TableCustomerInvoice = (props) => {
-    const { options, setcustinv } = props;
+    const { options, setcustinv, setshowradiobuttons } = props;
     
-    const onChange = (e, index) => {
-      setcustinv(index)
+    // 
+    const onChange = (e, invoice_id) => {
+      setcustinv(invoice_id)
+      setshowradiobuttons(true)
+      sessionStorage.setItem('single_customer_invoice', JSON.stringify(options.find(obj => obj.invoice_id === invoice_id)))
     }
   
     return (

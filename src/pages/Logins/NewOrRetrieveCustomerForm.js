@@ -10,41 +10,6 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
         customer_name: ""
     }
 
-    // const[customerInfos, setCustomerInfo] = useState([])
-
-    // const customerInfo = {
-    //     invoice_id: "", 
-    //     customer_id: "", 
-    //     customer_name: "",
-    //     sale_man_id: "",
-    //     sale_man_name: "",
-    //     customer_phone: "",
-    //     customer_address: "",
-    //     customer_city: "",
-    //     customer_state: "",
-    //     customer_zip_code: "",
-    //     customer_country: "", 
-    // }
-    
-    // const mappingCustomerInfo = (custInfo, custObjects, custInfos, setCustInfo) => {
-    //     const newCustInfos = custObjects.map(custObject => {
-    //         return {
-    //             invoice_id: custObject.invoice_id, 
-    //             customer_id: custObject.customer_id,
-    //             customer_name: custObject.customer_name,
-    //             sale_man_id: custObject.sale_man_id,
-    //             sale_man_name: custObject.sale_man_name,
-    //             customer_phone: custObject.customer_phone,
-    //             customer_address: custObject.customer_address,
-    //             customer_city: custObject.customer_city,
-    //             customer_state: custObject.customer_state,
-    //             customer_zip_code: custObject.customer_zip_code,
-    //             customer_country: custObject.customer_country
-    //         };
-    //     });
-    //     sessionStorage.setItem('customer_info', JSON.stringify(newCustInfos))
-    // }
-
     const navigate = useNavigate();
 
     const navigateToCustomerInvoice = () => {
@@ -54,7 +19,7 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
     const[showError, setShowError] = useState(false)
 
     const showHideError = ((show) => {
-        // setShowError(show)
+        setShowError(show)
       })
 
     return (
@@ -98,20 +63,6 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
                                 sessionStorage.setItem('customer_invoice', JSON.stringify(resCustomerInvoice))
                                 navigateToCustomerInvoice()
                             }    
-                            // set all fields to reuse later
-                            // setFormInfoCustomerId(resCustomer.customer_id)
-                            // setFormInfoCustomerName(resCustomer.customer_name)
-                            // setFormInfoSaleManId(resCustomer.sale_man_id)
-                            // sessionStorage.setItem('customer_id', resCustomer.customer_id)
-                            // sessionStorage.setItem('customer_name', resCustomer.customer_name)
-                            // sessionStorage.setItem('sale_man_id', resCustomer.sale_man_id)
-                            // const dataSaleMan = await fetch('http://127.0.0.1:8000/sale/' + resCustomer.sale_man_id)
-                            // const resSaleMan = await dataSaleMan.json()
-                            // if(resSaleMan !== undefined){
-                            //     setFormInfoSaleManName(resSaleMan.sale_man_name)
-                            //     sessionStorage.setItem("sale_man_name", resSaleMan.sale_man_name)
-                            // }
-                            // navigateToCustomerInvoice()
                         }
                     }}
                 >
@@ -146,7 +97,7 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
             </Formik>
         </div>
       </div>
-    );
+    )
   };
 
   export default NewOrRetrieveCustomerForm

@@ -56,6 +56,13 @@ const MainComponent = ({formInfo, formState}) => {
     const[showError, setShowError] = useState(false)
     const[newInvoice, setNewInvoice] = useState(false)
 
+    // if use existing invoice, disable invoice field and populate invoice # for invoice field
+    let invoiceNumber = ''
+    const checkInvoice = sessionStorage.getItem('invoice')
+    const customerInvoiceRecord = JSON.parse(sessionStorage.getItem('single_customer_invoice'))
+    if(checkInvoice === 'reuse'){
+        invoiceNumber = customerInvoiceRecord.invoice_id
+    }
     // update single field in the array of object
     const updateInvoiceValue = ((newValue) => {
         const newDataOrders = dataOrders.map(dataOrder => {
