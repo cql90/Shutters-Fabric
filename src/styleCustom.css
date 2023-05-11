@@ -290,6 +290,15 @@ legend[type="max"] {
   display: inline-block;
 }
 
+#reuse {
+  margin-left: 10px;
+  color: red;
+}
+
+#custnameandphone {
+  color: blue;
+}
+
 .textBox-show {
   visibility: hidden;
 }

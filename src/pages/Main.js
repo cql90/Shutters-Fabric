@@ -60,9 +60,12 @@ const MainComponent = ({formInfo, formState}) => {
     let invoiceNumber = ''
     const checkInvoice = sessionStorage.getItem('invoice')
     const customerInvoiceRecord = JSON.parse(sessionStorage.getItem('single_customer_invoice'))
-    if(checkInvoice === 'reuse'){
-        invoiceNumber = customerInvoiceRecord.invoice_id
+    if(customerInvoiceRecord !== null && customerInvoiceRecord !== undefined) {
+        if(checkInvoice === 'reuse'){
+            invoiceNumber = customerInvoiceRecord.invoice_id
+        }
     }
+    
     // update single field in the array of object
     const updateInvoiceValue = ((newValue) => {
         const newDataOrders = dataOrders.map(dataOrder => {
@@ -235,11 +238,11 @@ const MainComponent = ({formInfo, formState}) => {
         register,
         handleSubmit,
         formState: { errors }
-      } = useForm({
+    } = useForm({
         defaultValues: {
             dividerSplitSize: initialValues.dividerSplitSize,
         }
-      });
+    });
 
     const checkOrderExisted = async () => {
         OrderInfo.invoice_id = invoiceId
@@ -538,9 +541,9 @@ const MainComponent = ({formInfo, formState}) => {
                         <fieldset>  
                         <legend type="max">Divider/Split Size</legend>
                             <Form.Check type="radio" name="dividerSplitSize" value="50/50" label="50/50" {...register("dividerSplitSize", {
-                                required: "Please select your gender"})} onChange={handleDividerSplitSizeChange} /> 
+                                required: "Please select your option"})} onChange={handleDividerSplitSizeChange} /> 
                             <Form.Check type="radio" name="dividerSplitSize" value="30/70" label="30/70" {...register("dividerSplitSize", {
-                                required: "Please select your gender"})} onChange={handleDividerSplitSizeChange} />
+                                required: "Please select your option"})} onChange={handleDividerSplitSizeChange} />
                             <div className="div-vertical-spacing"></div>
                             <div className="div-vertical-spacing-10"></div>
                         </fieldset>

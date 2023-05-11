@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
-import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
+import { useForm } from 'react-hook-form';
+import { Form } from "react-bootstrap";
 import * as Yup from "yup";
 import "../../style.css";
 import "../../styleCustom.css";
 import TableCustomerInvoice from '../../Components/TableCustomerInvoice';
-import RadioButtonComponentExt from '../../Components/RadioButtonComponentExt';
-import dataCustInv from "../../data/dataCustomerInvoice.json";
 
-  const dataCustInvoice = JSON.parse(JSON.stringify(dataCustInv))
+
   // And now we can use these
 const CustomerInvoiceForm = () => {  
   const customerInvoice = JSON.parse(sessionStorage.getItem('customer_invoice'))
 
   const[custInv, setCustInv] = useState('')
-  const[fontSize, setFontSize] = useState('1.4rem')
   const[showRadioButtons, setShowRadioButtons] = useState(false)
 
   // if only one customer retrieved, set radio button reuse invoice + invoice_id
@@ -32,34 +30,44 @@ const CustomerInvoiceForm = () => {
       navigate('/home');
   };
 
+  const singleCustomerInvoice = JSON.parse(sessionStorage.getItem('single_customer_invoice'));
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+    }
+  });
+
+  const onSubmit = async  (data, e) => {
+    navigateToOrder()
+  };  
+
   return (
     <div className="container-fluid">
     <div className="divCustomerInvoice" id="divCustomerInvoice">
-      <Formik
-        initialValues={{
-        }}
-        validationSchema={Yup.object({
-        })}
-        
-        onSubmit={async (values, { setSubmitting }) => {
-          setSubmitting(false);
-          navigateToOrder()
-        }}
-      >
-        <Form>
+        <Form onSubmit={handleSubmit(onSubmit)} >
           <TableCustomerInvoice options={customerInvoice} setcustinv={setCustInv} setshowradiobuttons={setShowRadioButtons} ></TableCustomerInvoice>
           <br></br>
           { showRadioButtons && <div className="div-textbox-main" style={{marginLeft: '10px'}}>
-            <fieldset style={{paddingTop: '.8rem', height: '6rem'}}>  
-                <RadioButtonComponentExt name="customerinvoice" display="" options={dataCustInvoice} changelabel={custInv} fontsize={fontSize} selectchange={handleCustomerInvoiceChange}/>             
+            <fieldset style={{paddingTop: '.8rem', height: '6rem', width: '450px'}}>  
+                <div className="div-parent">                
+                <Form.Check type="radio" style={{display: 'inline-block'}} name="customerinvoice" value="reuse" label="Reuse Invoice" {...register("customerinvoice", {
+                    required: "Please select your option"})} onChange={handleCustomerInvoiceChange} />
+                    <label id="reuse">{singleCustomerInvoice.invoice_id}</label><label id="custnameandphone">&nbsp;&nbsp;for &nbsp;{singleCustomerInvoice.customer_name}&nbsp;&nbsp;-&nbsp;&nbsp;{singleCustomerInvoice.customer_phone}</label> 
+                </div>    
+                <Form.Check type="radio" name="customerinvoice" value="new" label="Create new Invoice" {...register("customerinvoice", {
+                    required: "Please select your option"})} onChange={handleCustomerInvoiceChange} />
+                <div className="div-vertical-spacing"></div>
+                <div className="div-vertical-spacing-10"></div>
             </fieldset>
             <div className="form-main-button-position">
                 <button type="submit" >Start Order</button>
             </div>
           </div> }
         </Form>
-        
-      </Formik>
     </div>
     </div>
   );

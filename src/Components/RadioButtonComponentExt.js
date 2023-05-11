@@ -13,7 +13,7 @@ import TextError  from "./TextError"
 // }
 
 const RadioButtonComponentExt = (props) => {
-    const {name, options, fontsize, changelabel, selectchange, checkedoption} = props;
+    const {name, options, selectchange, checkedoption} = props;
     const x = options;
     const initialValues = {
         measurement: "Standard",
@@ -27,7 +27,7 @@ const RadioButtonComponentExt = (props) => {
         hingsChoice: checkedoption,
         dividerSplitOption: "None",
         dividerSplitSize: "",
-        customerinvoice: "new"
+        customerinvoice: ""
     };
 
     const {
@@ -61,14 +61,13 @@ const RadioButtonComponentExt = (props) => {
                 options.map((option, i) => {
                     return (
                         <div key={i} >
-                            <label style={{fontSize: fontsize}} >
+                            <label>
                             <input type="radio" id={option.id} value={option.value} disabled={props.notallow} 
                             {...register(name)}  onChange={selectChange}/>
-                            {option.name} {option.id === "reuse" ? changelabel: ""}</label>                                
+                            {option.name}</label>                                
                         </div>   
                     ) 
-                })
-                
+                })                
             }
         </div>
     );
