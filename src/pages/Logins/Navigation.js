@@ -11,6 +11,7 @@ import ResetPasswordForm from './ResetPasswordForm';
 import ValidationCodeForm from './ValidationCode';
 import CustomerInfoForm from './CustomerInfoForm';
 import NewOrRetrieveCustomerForm from './NewOrRetrieveCustomerForm';
+import CustomerInvoiceForm from './CustomerInvoiceForm';
 
 
 const NavbarComponent = () => {
@@ -36,6 +37,7 @@ const NavbarComponent = () => {
             <Nav className="ms-auto">
                 <Nav.Link as={Link} to="/login">Login</Nav.Link>
                 <Nav.Link as={Link} to="/customer">Customer Info</Nav.Link>
+                <Nav.Link as={Link} to="/customerinvoice">Customer</Nav.Link>
                 <Nav.Link as={Link} to="/order">Create New Order</Nav.Link>
                 <Nav.Link as={Link} to="/resetPassword">Reset Password</Nav.Link>
                 <Nav.Link as={Link} to="/validationCode">Validation Code</Nav.Link>
@@ -50,6 +52,7 @@ const NavbarComponent = () => {
             <Route path="/" element={<LoginForm formInfo={info} formState={setInfo}/>}></Route>
             <Route path="/login" element={<LoginForm formInfo={info} formState={setInfo}/>}></Route>
             <Route path="/customer" element={<CustomerInfoForm formInfo={info} formState={setInfo}/>}></Route>
+            <Route path="/customerinvoice" element={<CustomerInvoiceForm />}></Route>
             <Route path="/order" element={<NewOrRetrieveCustomerForm formInfo={info} formState={setInfo}/>}></Route>
             <Route path="/resetPassword" element={<ResetPasswordForm formInfo={info} formState={setInfo}/>}></Route>
             <Route path="/validationCode" element={<ValidationCodeForm />}></Route>

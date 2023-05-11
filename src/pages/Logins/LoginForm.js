@@ -39,6 +39,7 @@ const LoginForm = ({formInfo, formState}) => {
   })
 
   return (
+    <div className="container-fluid">
     <div className="form-login-position">
       <h1>Login!</h1>{ showError && <h4 style={{color: 'red'}}>Invalid email or password</h4> }
       <Formik
@@ -94,6 +95,7 @@ const LoginForm = ({formInfo, formState}) => {
         </Form>
         
       </Formik>
+    </div>
     </div>
   );
 };
