@@ -57,7 +57,6 @@ const MainComponent = ({formInfo, formState}) => {
     const[invoiceId, setInvoiceId] = useState('')
     const[showError, setShowError] = useState(false)
     const[newInvoice, setNewInvoice] = useState(false)
-    const[useExistingInvoice, setUseExistingInvoice] = useState('')
 
    
     // update single field in the array of object
@@ -78,11 +77,10 @@ const MainComponent = ({formInfo, formState}) => {
     })
 
     const handleInvoiceChange = ((e) => {
-        if(useExistingInvoice !== '' && sessionStorage.getItem('invoice') === 'reuse'){
-            e.currentTarget.value = useExistingInvoice
+        if(invoiceId !== '' && sessionStorage.getItem('invoice') === 'reuse'){
+            e.currentTarget.value = invoiceId
             return
         }
-        setUseExistingInvoice(e.currentTarget.value)
         setInvoiceId(e.currentTarget.value)
         sessionStorage.setItem('invoice_id', e.currentTarget.value)
         updateInvoiceValue(e.currentTarget.value)
@@ -214,7 +212,7 @@ const MainComponent = ({formInfo, formState}) => {
         if(customerInvoiceRecord !== null && customerInvoiceRecord !== undefined) {
             checkInvoice = sessionStorage.getItem('invoice')
             if(checkInvoice === 'reuse'){
-                setUseExistingInvoice(customerInvoiceRecord.invoice_id)
+                setInvoiceId(customerInvoiceRecord.invoice_id)
             }
             setCustomerFirstName(customerInvoiceRecord.customer_first_name)
             setCustomerLastName(customerInvoiceRecord.customer_last_name)
@@ -399,7 +397,7 @@ const MainComponent = ({formInfo, formState}) => {
                             <div className="classdiv div-parent" >
                                 <label className="label-main-small">Invoice</label>
                                 <input id={dataMain[0][0].id} classdiv="div-textbox-main" {...register("invoiceNumber", { required: true })} name="invoiceNumber" type="text-main" disabled={disableInvoiceField} 
-                                value={useExistingInvoice} onChange={handleInvoiceChange}/>
+                                value={invoiceId} onChange={handleInvoiceChange}/>
                             </div>
                             <div className="div-horizontal-spacing"></div>
                             <TextBoxComponentExt id={dataMain[0][1].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][1].name} name={dataMain[0][1].value} type="text-main" fieldvalue={customerName}/>
