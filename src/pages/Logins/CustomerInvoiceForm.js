@@ -15,11 +15,6 @@ const CustomerInvoiceForm = () => {
   const[custInv, setCustInv] = useState('')
   const[showRadioButtons, setShowRadioButtons] = useState(false)
 
-  // if only one customer retrieved, set radio button reuse invoice + invoice_id
-  if(customerInvoice.length == 1) {
-    setCustInv(customerInvoice.invoice_id)
-  }
-
   const handleCustomerInvoiceChange = ((e) => {
     sessionStorage.setItem('invoice', e.currentTarget.value)
   })

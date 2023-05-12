@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {  
     const customerCompany = {
         company_id: "",
-        customer_name: ""
+        customer_first_name: "",
+        customer_last_name: ""
     }
 
     const navigate = useNavigate();
@@ -26,52 +27,48 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
       <div className="container-fluid">
         <div style={{width: '100%', height: 100}}></div>
         <div style={{width: 500, height: 300, display: 'inline-block'}}></div>
-        <div className="div-order-form" style={{height: 350, display: 'inline-block'}}>
+        <div className="div-order-form" style={{height: 400, display: 'inline-block'}}>
             <div className=" " >
                 <h3>Create new order for this Customer!</h3>{ showError && <h4 style={{color: 'red'}}>Customer wasn't in the system</h4> }
                 <Formik
                     initialValues={{
-                    customerName: ""
+                        firstName: "",
+                        lastName: "",
                     }}
                     validationSchema={Yup.object({
-                        customerName: Yup.string()
-                        .required("Customer Name is required"),                
+                        firstName: Yup.string()
+                        .required("First Name is required"),  
+                        lastName: Yup.string()
+                        .required("Last Name is required"),              
                     })}
 
                     onSubmit={async (values, { setSubmitting }) => {
                         await new Promise(r => setTimeout(r, 10));
                         setSubmitting(false);
-                        // make sure Customer existed in database first then make second call to retrieve customer and invoice
-                        // const data = await fetch('http://127.0.0.1:8000/customer_name/' + values.customerName)
-                        // const resCustomer = await data.json()
-                        // if(data.statusText == 'Not Found'){
-                        //     showHideError(true)
-                        //     return
-                        // }
-                        // if(resCustomer !== undefined) {
-                            customerCompany.company_id = sessionStorage.getItem("company_id")
-                            customerCompany.customer_name = values.customerName.trim()
-                            // make this call to retrieve Customer and invoice information
-                            const requestOptions = {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(customerCompany)
-                            }
-                            const data = await fetch('http://127.0.0.1:8000/customer_invoice', requestOptions)
-                            const resCustomerInvoice = await data.json()
-                            if(resCustomerInvoice !== undefined && resCustomerInvoice[0] !== "Not Found"){
-                                sessionStorage.setItem('customer_invoice', JSON.stringify(resCustomerInvoice))
-                                navigateToCustomerInvoice()
-                            }
-                            else {
-                                showHideError(true)
-                                return
-                            }    
-                        // }
+                        customerCompany.company_id = sessionStorage.getItem("company_id")
+                        customerCompany.customer_first_name = values.firstName.trim()
+                        customerCompany.customer_last_name = values.lastName.trim()
+                        // make this call to retrieve Customer and invoice information
+                        const requestOptions = {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(customerCompany)
+                        }
+                        const data = await fetch('http://127.0.0.1:8000/customer_invoice', requestOptions)
+                        const resCustomerInvoice = await data.json()
+                        if(resCustomerInvoice !== undefined && resCustomerInvoice[0] !== "Not Found"){
+                            sessionStorage.setItem('customer_invoice', JSON.stringify(resCustomerInvoice))
+                            navigateToCustomerInvoice()
+                        }
+                        else {
+                            showHideError(true)
+                            return
+                        }    
                     }}
                 >
                 <Form>
-                    <TextBoxComponent label="Customer Name" name="customerName" type="text" placeholder="Came back Customer" />
+                    <TextBoxComponent label="First Name" name="firstName" type="text" placeholder="First Name" />
+                    <TextBoxComponent label="Last Name" name="lastName" type="text" placeholder="Last Name" />
                     <button type="submit">Retrieve</button>
                     <br></br>
                 </Form>      

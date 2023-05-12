@@ -204,9 +204,9 @@ const MainComponent = ({formInfo, formState}) => {
             checkInvoice = sessionStorage.getItem('invoice')
             if(checkInvoice === 'reuse'){
                 setUseExistingInvoice(customerInvoiceRecord.invoice_id)
-                setCustomerName(customerInvoiceRecord.customer_name)
-                setSaleManName(customerInvoiceRecord.sale_man_name)
             }
+            setCustomerName(customerInvoiceRecord.customer_first_name + ' ' + customerInvoiceRecord.customer_last_name)
+            setSaleManName(customerInvoiceRecord.sale_man_name)
         }
     })
     

@@ -20,7 +20,8 @@ const NavbarComponent = () => {
     sale_man_id: '',
     customer_id: '',
     invoice_id: '',
-    customer_name: '',
+    customer_first_name: '',
+    customer_last_name: '',
     sale_man_name: ''
   })
 

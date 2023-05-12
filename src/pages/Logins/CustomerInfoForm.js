@@ -17,7 +17,8 @@ const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2
 const CustomerInfoForm = ({formInfo, formState}) => {  
   const cusInfo = {
     sale_man_id: "",
-    customer_name: "",
+    customer_first_name: "",
+    customer_last_name: "",
     customer_phone: "",
     customer_address: "", 
     customer_city: "",
@@ -50,8 +51,12 @@ const CustomerInfoForm = ({formInfo, formState}) => {
     formState({...formInfo, customer_id: val})
   })
 
-  const setFormInfoCustomerName = ((val) => {
-    formState({...formInfo, customer_name: val})
+  const setFormInfoCustomerFirstName = ((val) => {
+    formState({...formInfo, customer_first_name: val})
+  })
+
+  const setFormInfoCustomerLastName = ((val) => {
+    formState({...formInfo, customer_last_name: val})
   })
 
   return (
@@ -59,7 +64,8 @@ const CustomerInfoForm = ({formInfo, formState}) => {
       <h1>Customer Info!</h1>
       <Formik
       initialValues={{
-        customerName: "",
+        firstName: "",
+        lastName: "",
         streetName: "",
         cityName: "",
         state: "",
@@ -69,8 +75,10 @@ const CustomerInfoForm = ({formInfo, formState}) => {
         salePhone: ""
       }}
         validationSchema={Yup.object({
-          customerName: Yup.string()
-            .required("Customer Name is required"),
+          firstName: Yup.string()
+            .required("First Name is required"),
+          lastName: Yup.string()
+            .required("Last Name is required"),  
           streetName: Yup.string()
             .required("Street Name is required"),
           cityName: Yup.string()
@@ -116,7 +124,8 @@ const CustomerInfoForm = ({formInfo, formState}) => {
             setFormInfoSaleManName(resSaleMan.sale_man_name)
             sessionStorage.setItem('sale_man_id', resSaleMan.sale_man_id)
             sessionStorage.setItem('sale_man_name', resSaleMan.sale_man_name)
-            cusInfo.customer_name = values.customerName
+            cusInfo.customer_first_name = values.firstName
+            cusInfo.customer_last_name = values.lastName
             cusInfo.customer_address = values.streetName
             cusInfo.customer_city = values.cityName
             cusInfo.customer_state = values.state
@@ -132,8 +141,10 @@ const CustomerInfoForm = ({formInfo, formState}) => {
             const resCustomer = await data.json()
             if(resCustomer !== undefined) {
               setFormInfoCustomerId(resCustomer.customer_id)
-              setFormInfoCustomerName(values.customerName)
-              sessionStorage.setItem('customer_name', values.customerName)
+              setFormInfoCustomerFirstName(values.firstName)
+              setFormInfoCustomerLastName(values.lastName)
+              sessionStorage.setItem('customer_first_name', values.firstName)
+              sessionStorage.setItem('customer_last_name', values.lastName)
               sessionStorage.setItem('customer_id', resCustomer.customer_id)
               navigateToMain()
             }
@@ -144,7 +155,8 @@ const CustomerInfoForm = ({formInfo, formState}) => {
         }}
       >
         <Form>
-          <TextBoxComponent label="Customer Name" name="customerName" type="text" placeholder="Customer Name" />
+          <TextBoxComponent label="First Name" name="firstName" type="text" placeholder="First Name" />
+          <TextBoxComponent label="Last Name" name="lastName" type="text" placeholder="Last Name" />
           <TextBoxComponent label="Street Name" name="streetName" type="text" placeholder="555 Yolanda st." />
           <TextBoxComponent label="City Name" name="cityName" type="text" placeholder="Woodland Hills" />
           <SelectComponent label="State" name="state" type="select" options={selectState} />
