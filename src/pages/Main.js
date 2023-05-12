@@ -55,17 +55,9 @@ const MainComponent = ({formInfo, formState}) => {
     const[invoiceId, setInvoiceId] = useState('')
     const[showError, setShowError] = useState(false)
     const[newInvoice, setNewInvoice] = useState(false)
+    const[useExistingInvoice, setUseExistingInvoice] = useState('')
 
-    // if use existing invoice, disable invoice field and populate invoice # for invoice field
-    let invoiceNumber = ''
-    const checkInvoice = sessionStorage.getItem('invoice')
-    const customerInvoiceRecord = JSON.parse(sessionStorage.getItem('single_customer_invoice'))
-    if(customerInvoiceRecord !== null && customerInvoiceRecord !== undefined) {
-        if(checkInvoice === 'reuse'){
-            invoiceNumber = customerInvoiceRecord.invoice_id
-        }
-    }
-    
+   
     // update single field in the array of object
     const updateInvoiceValue = ((newValue) => {
         const newDataOrders = dataOrders.map(dataOrder => {
@@ -84,6 +76,10 @@ const MainComponent = ({formInfo, formState}) => {
     })
 
     const handleInvoiceChange = ((e) => {
+        if(useExistingInvoice !== ''){
+            e.currentTarget.value = useExistingInvoice
+            return
+        }
         setInvoiceId(e.currentTarget.value)
         sessionStorage.setItem('invoice_id', e.currentTarget.value)
         updateInvoiceValue(e.currentTarget.value)
@@ -199,6 +195,20 @@ const MainComponent = ({formInfo, formState}) => {
     const setFormInfoCompanyId = (() => {
         setCompanyId(sessionStorage.getItem('company_id'))
     })
+
+    const initializeFields = (() => {
+        // if use existing invoice, disable invoice field and populate invoice # for invoice field
+        let checkInvoice = ''
+        const customerInvoiceRecord = JSON.parse(sessionStorage.getItem('single_customer_invoice'))
+        if(customerInvoiceRecord !== null && customerInvoiceRecord !== undefined) {
+            checkInvoice = sessionStorage.getItem('invoice')
+            if(checkInvoice === 'reuse'){
+                setUseExistingInvoice(customerInvoiceRecord.invoice_id)
+                setCustomerName(customerInvoiceRecord.customer_name)
+                setSaleManName(customerInvoiceRecord.sale_man_name)
+            }
+        }
+    })
     
     useEffect(() => {
         setFormInfoSaleManId()
@@ -207,15 +217,17 @@ const MainComponent = ({formInfo, formState}) => {
         setFormInfoCustomerName()
         setFormInfoCompanyId()
         setFormInfoInvoiceId()
+        initializeFields()
     }, [])
- 
-    const showHideError = ((show) => {
-      setShowError(show)
-    })
+
     const initialValues = {
         dividerSplitSize: ""
     };
 
+    const showHideError = ((show) => {
+      setShowError(show)
+    })
+    
     const OrderInfo = {
         invoice_id: "",
         customer_id: ""
@@ -368,7 +380,7 @@ const MainComponent = ({formInfo, formState}) => {
                             <div className="classdiv div-parent" >
                                 <label className="label-main-small">Invoice</label>
                                 <input id={dataMain[0][0].id} classdiv="div-textbox-main" {...register("invoiceNumber", { required: true })} name="invoiceNumber" type="text-main" disabled={disableInvoiceField} 
-                                onChange={handleInvoiceChange}/>
+                                value={useExistingInvoice} onChange={handleInvoiceChange}/>
                             </div>
                             <div className="div-horizontal-spacing"></div>
                             <TextBoxComponentExt id={dataMain[0][1].id} disabled classdiv="div-textbox-main" classlabel="label-main" label={dataMain[0][1].name} name={dataMain[0][1].value} type="text-main" fieldvalue={customerName}/>

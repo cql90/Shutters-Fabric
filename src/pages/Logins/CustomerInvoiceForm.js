@@ -52,16 +52,17 @@ const CustomerInvoiceForm = () => {
           <TableCustomerInvoice options={customerInvoice} setcustinv={setCustInv} setshowradiobuttons={setShowRadioButtons} ></TableCustomerInvoice>
           <br></br>
           { showRadioButtons && <div className="div-textbox-main" style={{marginLeft: '10px'}}>
-            <fieldset style={{paddingTop: '.8rem', height: '6rem', width: '450px'}}>  
+            <fieldset style={{paddingTop: '.8rem', height: '6rem', width: '520px'}}>  
                 <div className="div-parent">                
                 <Form.Check type="radio" style={{display: 'inline-block'}} name="customerinvoice" value="reuse" label="Reuse Invoice" {...register("customerinvoice", {
                     required: "Please select your option"})} onChange={handleCustomerInvoiceChange} />
-                    <label id="reuse">{singleCustomerInvoice.invoice_id}</label><label id="custnameandphone">&nbsp;&nbsp;for &nbsp;{singleCustomerInvoice.customer_name}&nbsp;&nbsp;-&nbsp;&nbsp;{singleCustomerInvoice.customer_phone}</label> 
-                </div>    
-                <Form.Check type="radio" name="customerinvoice" value="new" label="Create new Invoice" {...register("customerinvoice", {
+                    <label id="reuse">{singleCustomerInvoice.invoice_id}</label><label id="reusecustnameandphone">&nbsp;&nbsp;for &nbsp;{singleCustomerInvoice.customer_name}&nbsp;&nbsp;-&nbsp;&nbsp;{singleCustomerInvoice.customer_phone}</label> 
+                </div>  
+                <div className="div-parent">  
+                <Form.Check type="radio" style={{display: 'inline-block'}} name="customerinvoice" value="new" label="Create new Invoice" {...register("customerinvoice", {
                     required: "Please select your option"})} onChange={handleCustomerInvoiceChange} />
-                <div className="div-vertical-spacing"></div>
-                <div className="div-vertical-spacing-10"></div>
+                    <label id="newcustnameandphone">&nbsp;&nbsp;for &nbsp;{singleCustomerInvoice.customer_name}&nbsp;&nbsp;-&nbsp;&nbsp;{singleCustomerInvoice.customer_phone}</label> 
+                </div>
             </fieldset>
             <div className="form-main-button-position">
                 <button type="submit" >Start Order</button>

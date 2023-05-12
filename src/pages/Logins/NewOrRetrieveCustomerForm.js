@@ -42,15 +42,15 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
                         await new Promise(r => setTimeout(r, 10));
                         setSubmitting(false);
                         // make sure Customer existed in database first then make second call to retrieve customer and invoice
-                        const data = await fetch('http://127.0.0.1:8000/customer_name/' + values.customerName)
-                        const resCustomer = await data.json()
-                        if(data.statusText == 'Not Found'){
-                            showHideError(true)
-                            return
-                        }
-                        if(resCustomer !== undefined) {
+                        // const data = await fetch('http://127.0.0.1:8000/customer_name/' + values.customerName)
+                        // const resCustomer = await data.json()
+                        // if(data.statusText == 'Not Found'){
+                        //     showHideError(true)
+                        //     return
+                        // }
+                        // if(resCustomer !== undefined) {
                             customerCompany.company_id = sessionStorage.getItem("company_id")
-                            customerCompany.customer_name = values.customerName
+                            customerCompany.customer_name = values.customerName.trim()
                             // make this call to retrieve Customer and invoice information
                             const requestOptions = {
                                 method: 'POST',
@@ -59,11 +59,15 @@ const NewOrRetrieveCustomerForm = ({formInfo, formState}) => {
                             }
                             const data = await fetch('http://127.0.0.1:8000/customer_invoice', requestOptions)
                             const resCustomerInvoice = await data.json()
-                            if(resCustomerInvoice !== undefined){
+                            if(resCustomerInvoice !== undefined && resCustomerInvoice[0] !== "Not Found"){
                                 sessionStorage.setItem('customer_invoice', JSON.stringify(resCustomerInvoice))
                                 navigateToCustomerInvoice()
+                            }
+                            else {
+                                showHideError(true)
+                                return
                             }    
-                        }
+                        // }
                     }}
                 >
                 <Form>

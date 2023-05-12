@@ -290,12 +290,12 @@ legend[type="max"] {
   display: inline-block;
 }
 
-#reuse {
+#reuse, #new {
   margin-left: 10px;
   color: red;
 }
 
-#custnameandphone {
+#reusecustnameandphone, #newcustnameandphone {
   color: blue;
 }
 
