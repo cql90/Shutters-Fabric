@@ -146,6 +146,8 @@ const CustomerInfoForm = ({formInfo, formState}) => {
               sessionStorage.setItem('customer_first_name', values.firstName)
               sessionStorage.setItem('customer_last_name', values.lastName)
               sessionStorage.setItem('customer_id', resCustomer.customer_id)
+              sessionStorage.setItem('sale_man_id', resCustomer.sale_man_id)
+              sessionStorage.setItem('invoice', 'new')
               navigateToMain()
             }
           }

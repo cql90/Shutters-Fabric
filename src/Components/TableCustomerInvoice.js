@@ -33,7 +33,7 @@ import React from 'react';
                     <label>{option.invoice_id}</label>
                 </td>
                 <td>
-                    <label>{option.customer_name}</label>
+                    <label>{option.customer_first_name}&nbsp;{option.customer_last_name}</label>
                 </td>
                 <td>
                   <label>{option.customer_phone}</label>

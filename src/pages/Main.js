@@ -48,6 +48,8 @@ const MainComponent = ({formInfo, formState}) => {
     const[disableInvoiceField, setDisableInvoiceField] = useState(false)
 
     const[customerId, setCustomerId] = useState('')
+    const[customerFirstName, setCustomerFirstName] = useState('')
+    const[customerLastName, setCustomerLastName] = useState('')
     const[customerName, setCustomerName] = useState('')
     const[saleManId, setSaleManId] = useState('')
     const[saleManName, setSaleManName] = useState('')
@@ -76,10 +78,11 @@ const MainComponent = ({formInfo, formState}) => {
     })
 
     const handleInvoiceChange = ((e) => {
-        if(useExistingInvoice !== ''){
+        if(useExistingInvoice !== '' && sessionStorage.getItem('invoice') === 'reuse'){
             e.currentTarget.value = useExistingInvoice
             return
         }
+        setUseExistingInvoice(e.currentTarget.value)
         setInvoiceId(e.currentTarget.value)
         sessionStorage.setItem('invoice_id', e.currentTarget.value)
         updateInvoiceValue(e.currentTarget.value)
@@ -184,8 +187,16 @@ const MainComponent = ({formInfo, formState}) => {
         setCustomerId(sessionStorage.getItem('customer_id'))
     })
     
+    const setFormInfoCustomerFirstName = (() => {
+        setCustomerFirstName(sessionStorage.getItem('customer_first_name'))
+    })
+
+    const setFormInfoCustomerLastName = (() => {
+        setCustomerLastName(sessionStorage.getItem('customer_last_name'))
+    })
+
     const setFormInfoCustomerName = (() => {
-        setCustomerName(sessionStorage.getItem('customer_name'))
+        setCustomerName(sessionStorage.getItem('customer_first_name') + ' ' + sessionStorage.getItem('customer_last_name'))
     })
 
     const setFormInfoInvoiceId = (() => {
@@ -205,8 +216,13 @@ const MainComponent = ({formInfo, formState}) => {
             if(checkInvoice === 'reuse'){
                 setUseExistingInvoice(customerInvoiceRecord.invoice_id)
             }
+            setCustomerFirstName(customerInvoiceRecord.customer_first_name)
+            setCustomerLastName(customerInvoiceRecord.customer_last_name)
             setCustomerName(customerInvoiceRecord.customer_first_name + ' ' + customerInvoiceRecord.customer_last_name)
+            setCustomerId(customerInvoiceRecord.customer_id)
             setSaleManName(customerInvoiceRecord.sale_man_name)
+            setSaleManId(customerInvoiceRecord.sale_man_id)
+            setCompanyId(customerInvoiceRecord.company_id)
         }
     })
     
@@ -214,6 +230,8 @@ const MainComponent = ({formInfo, formState}) => {
         setFormInfoSaleManId()
         setFormInfoSaleManName()
         setFormInfoCustomerId()
+        setFormInfoCustomerFirstName()
+        setFormInfoCustomerLastName()
         setFormInfoCustomerName()
         setFormInfoCompanyId()
         setFormInfoInvoiceId()
@@ -228,19 +246,21 @@ const MainComponent = ({formInfo, formState}) => {
       setShowError(show)
     })
     
-    const OrderInfo = {
+    const InvoiceInfoCheck = {
         invoice_id: "",
-        customer_id: ""
+        company_id: ""
     }
 
     const InvoiceInfo = {
         invoice_id: "",
+        company_id: "",
         customer_id: "",
         sale_man_id: ""
     }
 
     const setInvoiceInfo = (() => {
         InvoiceInfo.invoice_id = invoiceId
+        InvoiceInfo.company_id = companyId
         InvoiceInfo.customer_id = customerId
         InvoiceInfo.sale_man_id = saleManId
         return InvoiceInfo
@@ -256,29 +276,30 @@ const MainComponent = ({formInfo, formState}) => {
         }
     });
 
-    const checkOrderExisted = async () => {
-        OrderInfo.invoice_id = invoiceId
-        OrderInfo.customer_id = customerId
+    const checkInvoiceExisted = async () => {
+        InvoiceInfoCheck.invoice_id = sessionStorage.getItem("invoice_id")
+        InvoiceInfoCheck.company_id = sessionStorage.getItem("company_id")
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(OrderInfo)
+            body: JSON.stringify(InvoiceInfoCheck)
         }
-        const data = await fetch('http://127.0.0.1:8000/order_existed', requestOptions)
+        const data = await fetch('http://127.0.0.1:8000/invoice_existed', requestOptions)
         const res = await data.json()
         return res
     }  
 
     const calculate = (async () => {
-        // check if invoice already existed
-        const resCheck = await checkOrderExisted()
-        // if resOrder.detail is valid, it means the invoice_id already in database
-        if(!newInvoice){
+        // check if invoice already existed if it is new
+        if(sessionStorage.getItem('invoice') === 'new'){
+            const resCheck = await checkInvoiceExisted()
+            // if resOrder.detail is valid, it means the invoice_id already in database
             if(resCheck !== undefined && resCheck.detail) {
                 setShowError(true)
                 return
             }
         }
+
         setShowError(false)
         let index = dataForTables.length
         const dataTable = {
@@ -291,6 +312,7 @@ const MainComponent = ({formInfo, formState}) => {
             insideFrame: insideFrame,
             numOfFrame: numOfFrame
         }
+
         const dataOrder = {
             id: index,
             invoice_id: invoiceId,
@@ -340,7 +362,7 @@ const MainComponent = ({formInfo, formState}) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(setInvoiceInfo())
         }
-        const data = await fetch('http://127.0.0.1:8000/invoice_object', requestOptions)
+        const data = await fetch('http://127.0.0.1:8000/invoice', requestOptions)
         const resInvoice = await data.json()
         return resInvoice
     }
@@ -350,20 +372,17 @@ const MainComponent = ({formInfo, formState}) => {
             calculate()
             return
         }
-        const resCheck = await checkOrderExisted()
-        // if resOrder.detail is Not Found, it means the invoice_id need to create
-        if(resCheck !== undefined && resCheck.detail === undefined) {
-            const resInvoice = createInvoice()
-            if(resInvoice !== undefined ){
-                setNewInvoice(true)
-                // Save new Order, send orders to server endpoint
-                setTimeout(() => {
-                    const resOrders = sendOrders()
-                    console.log(resOrders)
-                }, 100);
-                // const resOrders = await sendOrders()
-                console.log(resInvoice)
-            }
+        // save invoice to database
+        const resInvoice = createInvoice()
+        if(resInvoice !== undefined ){
+            setNewInvoice(true)
+            // Save new Order, send orders to server endpoint
+            setTimeout(() => {
+                const resOrders = sendOrders()
+                console.log(resOrders)
+            }, 500)
+            
+            console.log(resInvoice)
         }
         setDisableInvoiceField(true)
     };  

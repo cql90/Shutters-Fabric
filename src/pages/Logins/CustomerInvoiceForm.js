@@ -51,12 +51,13 @@ const CustomerInvoiceForm = () => {
                 <div className="div-parent">                
                 <Form.Check type="radio" style={{display: 'inline-block'}} name="customerinvoice" value="reuse" label="Reuse Invoice" {...register("customerinvoice", {
                     required: "Please select your option"})} onChange={handleCustomerInvoiceChange} />
-                    <label id="reuse">{singleCustomerInvoice.invoice_id}</label><label id="reusecustnameandphone">&nbsp;&nbsp;for &nbsp;{singleCustomerInvoice.customer_name}&nbsp;&nbsp;-&nbsp;&nbsp;{singleCustomerInvoice.customer_phone}</label> 
+                    <label id="reuse">{singleCustomerInvoice.invoice_id}</label><label id="reusecustnameandphone">
+                      &nbsp;&nbsp;for &nbsp;{singleCustomerInvoice.customer_first_name}&nbsp;&nbsp;{singleCustomerInvoice.customer_last_name}-&nbsp;&nbsp;{singleCustomerInvoice.customer_phone}</label> 
                 </div>  
                 <div className="div-parent">  
                 <Form.Check type="radio" style={{display: 'inline-block'}} name="customerinvoice" value="new" label="Create new Invoice" {...register("customerinvoice", {
                     required: "Please select your option"})} onChange={handleCustomerInvoiceChange} />
-                    <label id="newcustnameandphone">&nbsp;&nbsp;for &nbsp;{singleCustomerInvoice.customer_name}&nbsp;&nbsp;-&nbsp;&nbsp;{singleCustomerInvoice.customer_phone}</label> 
+                    <label id="newcustnameandphone">&nbsp;&nbsp;for &nbsp;{singleCustomerInvoice.customer_first_name}&nbsp;&nbsp;{singleCustomerInvoice.customer_last_name}-&nbsp;&nbsp;{singleCustomerInvoice.customer_phone}</label> 
                 </div>
             </fieldset>
             <div className="form-main-button-position">
