@@ -38,8 +38,8 @@ import { deleteItemStateObject, deleteOrderStateObject } from '../utilities/Dele
               <th>Length</th>
               <th>Hings</th>
               <th>Panel</th>
-              <th>Outside Frame</th>
-              <th>Inside Frame</th>
+              <th>Mount</th>
+              <th>Frame Size</th>
               <th>Frame</th>
               <th>Up</th>
               <th>Down</th>
@@ -59,19 +59,19 @@ import { deleteItemStateObject, deleteOrderStateObject } from '../utilities/Dele
                   <label>{option.length}</label>
                 </td>
                 <td>
-                  <label>{option.hingsChoice}</label>
+                  <label>{option.hingeChoice}</label>
                 </td>
                 <td>
                   <label>{option.panel}</label>
                 </td>
                 <td>
-                  <label>{option.outsideFrame}</label>
+                  <label>{option.mount.length === 0 ? "OM" : option.mount}</label>
                 </td>
                 <td>
-                  <label>{option.insideFrame}</label>
+                  <label>{option.insideFrame? option.insideFrame : option.outsideFrame}</label>
                 </td>
                 <td>
-                  <label>{option.numOfFrame} </label>
+                  <label>{option.frame} </label>
                 </td>
                 <td>
                   <label className="material-symbols-outlined" id="up" onClick={(e) => onChange(e, index)}>arrow_circle_up</label>

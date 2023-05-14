@@ -57,6 +57,7 @@ const MainComponent = ({formInfo, formState}) => {
     const[invoiceId, setInvoiceId] = useState('')
     const[showError, setShowError] = useState(false)
     const[newInvoice, setNewInvoice] = useState(false)
+    const[deleteBeforeSave, setDeleteBeforeSave] = useState([])
 
    
     // update single field in the array of object
@@ -306,9 +307,10 @@ const MainComponent = ({formInfo, formState}) => {
             length: length,
             hingeChoice: hingeChoice,
             panel: panel,
+            mount: mount,
             outsideFrame: outsideFrame,
             insideFrame: insideFrame,
-            numOfFrame: numOfFrame
+            frame: frame,
         }
 
         const dataOrder = {
@@ -324,7 +326,7 @@ const MainComponent = ({formInfo, formState}) => {
             measurement: measurement,
             instruction: instruction,
             hingeChoice: hingeChoice,
-            mount: mount,
+            mount: mount.length == 0 ? "OM" : mount,
             louver: louver,
             panel: panel,
             outsideFrame: outsideFrame,
@@ -365,24 +367,46 @@ const MainComponent = ({formInfo, formState}) => {
         return resInvoice
     }
 
+    const deleteOrders = async () => {
+        const deleteAllOrder = sessionStorage.getItem('ordersForDelete')
+        if(deleteAllOrder !== null && deleteAllOrder !== undefined) {
+            const requestOptions = {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: deleteAllOrder
+            }
+            const data = await fetch('http://127.0.0.1:8000/delete_orders_by_id', requestOptions)
+        }
+    }
+
     const onSubmit = async  (data, e) => {
         if(e.nativeEvent.submitter.name == "calculate"){
             calculate()
             return
         }
-        // save invoice to database
-        const resInvoice = createInvoice()
-        if(resInvoice !== undefined ){
-            setNewInvoice(true)
-            // Save new Order, send orders to server endpoint
-            setTimeout(() => {
-                const resOrders = sendOrders()
-                console.log(resOrders)
-            }, 500)
-            
-            console.log(resInvoice)
+        console.log(JSON.stringify(sessionStorage.getItem('ordersForDelete')))
+        // save invoice to database when use select create new invoice
+        if(sessionStorage.getItem('invoice') === 'new'){
+            const resInvoice = createInvoice()
+            if(resInvoice !== undefined ){  
+                setNewInvoice(true)
+                // Save new Order, send orders to server endpoint
+                setTimeout(() => {
+                    const resOrders = sendOrders().then(response => {
+                        sessionStorage.setItem('ordersForDelete', JSON.stringify(response))
+                    })
+                }, 500)
+            }
         }
-        setDisableInvoiceField(true)
+        else {
+            deleteOrders().then(response => {
+                setTimeout(() => {
+                    const resOrders = sendOrders().then(response => {
+                        sessionStorage.setItem('ordersForDelete', JSON.stringify(response))
+                    }, 3000)
+                })
+            })
+        }
     };  
 
     return (  
