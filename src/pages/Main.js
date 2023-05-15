@@ -139,10 +139,12 @@ const MainComponent = ({formInfo, formState}) => {
 
     const handleInsideFrameChange = ((e) => {
         setInsideFrame(e.currentTarget.value)
+        setOutsideFrame('')
     })
 
     const handleOutsideFrameChange = ((e) => {
         setOutsideFrame(e.currentTarget.value)
+        setInsideFrame('')
     })
 
     const handleColorChange = ((e) => {
@@ -154,6 +156,9 @@ const MainComponent = ({formInfo, formState}) => {
     })
 
     const handleDividerSplitOptionChange = ((e) => {
+        if(e.currentTarget.value === 'None'){
+            setDividerSplitSize('')
+        }
         setDividerSplitOption(e.currentTarget.value)
         showHideDividerSplit(e.currentTarget.value, setShowDividerSplit)
     })
