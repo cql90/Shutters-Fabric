@@ -6,6 +6,15 @@ import { deleteItemStateObject, deleteOrderStateObject } from '../utilities/Dele
   const TableDetailMain = (props) => {
     const { options, setdatafortable, optionorders, setdatafororder, showHideTable, setButtonDisable } = props;
     
+    // let opts = null
+    // // check if data return from existing invoice with several orders. If type is string => orders came back from old invoice
+    // if (typeof options[0].length === 'string') {
+    //   opts = options
+    // }
+    // else {
+    //   opts = options[0]
+    // }
+
     const onChange = (e, index) => {
       if(e.currentTarget.id === "up")
         swapArrayUp(index, options, setdatafortable)
@@ -13,7 +22,7 @@ import { deleteItemStateObject, deleteOrderStateObject } from '../utilities/Dele
         swapArrayDown(index, options, setdatafortable)
       else{
         deleteItemStateObject(index, options, setdatafortable, ShowHideTable, DisableSaveButton)     
-        deleteOrderStateObject(index, optionorders, setdatafororder)   
+        deleteOrderStateObject(index, optionorders, setdatafororder)  
       }
     }
 
@@ -68,7 +77,7 @@ import { deleteItemStateObject, deleteOrderStateObject } from '../utilities/Dele
                   <label>{option.mount.length === 0 ? "OM" : option.mount}</label>
                 </td>
                 <td>
-                  <label>{option.insideFrame? option.insideFrame : option.outsideFrame}</label>
+                  <label>{option.frameSize}</label>
                 </td>
                 <td>
                   <label>{option.frame} </label>

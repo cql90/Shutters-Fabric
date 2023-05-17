@@ -45,8 +45,6 @@ const MainComponent = ({formInfo, formState}) => {
     const[frame, setFrame] = useState('')
     const[numOfFrame, setNumOfFrame] = useState('')
     const[disable, setDisable] = useState(true)
-    const[disableInvoiceField, setDisableInvoiceField] = useState(false)
-
     const[customerId, setCustomerId] = useState('')
     const[customerFirstName, setCustomerFirstName] = useState('')
     const[customerLastName, setCustomerLastName] = useState('')
@@ -60,6 +58,17 @@ const MainComponent = ({formInfo, formState}) => {
     const[deleteBeforeSave, setDeleteBeforeSave] = useState([])
 
    
+    const dataTablex = {
+        id: 0,
+        width: '',
+        length: '',
+        hingeChoice: '',
+        panel: '',
+        mount: '',
+        outsideFrame: '',
+        insideFrame: '',
+        frame: '',
+    }
     // update single field in the array of object
     const updateInvoiceValue = ((newValue) => {
         const newDataOrders = dataOrders.map(dataOrder => {
@@ -211,8 +220,8 @@ const MainComponent = ({formInfo, formState}) => {
         setCompanyId(sessionStorage.getItem('company_id'))
     })
 
-    const initializeFields = (() => {
-        // if use existing invoice, disable invoice field and populate invoice # for invoice field
+    const initializeFields = ((isCancel) => {
+        // if use existing invoice, populate invoice # for invoice field
         let checkInvoice = ''
         const customerInvoiceRecord = JSON.parse(sessionStorage.getItem('single_customer_invoice'))
         if(customerInvoiceRecord !== null && customerInvoiceRecord !== undefined) {
@@ -220,17 +229,112 @@ const MainComponent = ({formInfo, formState}) => {
             if(checkInvoice === 'reuse'){
                 setInvoiceId(customerInvoiceRecord.invoice_id)
             }
-            setCustomerFirstName(customerInvoiceRecord.customer_first_name)
-            setCustomerLastName(customerInvoiceRecord.customer_last_name)
-            setCustomerName(customerInvoiceRecord.customer_first_name + ' ' + customerInvoiceRecord.customer_last_name)
-            setCustomerId(customerInvoiceRecord.customer_id)
-            setSaleManName(customerInvoiceRecord.sale_man_name)
-            setSaleManId(customerInvoiceRecord.sale_man_id)
-            setCompanyId(customerInvoiceRecord.company_id)
+            customerInvoiceObject(customerInvoiceRecord)
+            // retrieve all existing orders and display in table
+            initializeTableForDisplayExistingInvoice(customerInvoiceRecord.invoice_id, customerInvoiceRecord.customer_id, customerInvoiceRecord.sale_man_id).then(response => {
+                if(response !== undefined && response.length > 0) {
+                    // display existing orders in table
+                    if(!isCancel)
+                        populateDataForCalculationTable(response)     
+                }                
+            })
         }
+    })
+
+    const customerInvoiceObject = ((obj) => {
+        setCustomerFirstName(obj.customer_first_name)
+        setCustomerLastName(obj.customer_last_name)
+        setCustomerName(obj.customer_first_name + ' ' + obj.customer_last_name)
+        setCustomerId(obj.customer_id)
+        setSaleManName(obj.sale_man_name)
+        setSaleManId(obj.sale_man_id)
+        setCompanyId(obj.company_id)
+    })
+
+    const initializeTableForDisplayExistingInvoice = ( async (invoiceId, customerId, saleManId) => {
+        const existingInvoice = {
+            invoiceId: invoiceId,
+            customerId: customerId,
+            saleManId: saleManId
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(existingInvoice)
+        }
+        const data = await fetch('http://127.0.0.1:8000/invoice_customer_saleman', requestOptions)
+        const res = await data.json()
+        return res
+    })
+
+    const populateDataForCalculationTable = ((objs) => {
+        const newDataTables = objs.map((obj, index) => {
+            // return new dataTable object and added to array
+            return {
+                id: index,
+                width: obj.width,
+                length: obj.length,
+                hingeChoice: obj.hingeChoice == undefined ? '' : obj.hingeChoice,
+                panel: obj.panel == undefined ? '' : obj.panel,
+                mount: obj.mount === undefined ? '' : obj.mount,
+                frameSide: obj.frameSide == undefined ? '' : obj.frameSide,
+                frame: obj.frame == undefined ? '' : obj.frame
+            };
+        });
+        setShowHideTable(true)
+        // when user click save, delete these orders
+        keepExistingOrderToDeleteWhenSave(objs)
+        // // whe user click save, send all orders to server
+        keepExistingOrderWhenSave(objs)
+        // display retrieved existing orders. Copy individual object
+        setDataForTables([...dataForTables, ...newDataTables])
+    })
+
+    const keepExistingOrderToDeleteWhenSave = ((objs) => {
+        const orderIds = objs.map((obj) => {
+            // return new dataTable object and added to array
+            return {
+                orderId: obj.order_id
+            };
+        });
+        sessionStorage.setItem('ordersForDelete', JSON.stringify(orderIds))
+    })
+
+    const keepExistingOrderWhenSave = ((objs) => {
+        const orders = objs.map((obj, index) => {
+            // return existing order object and added to array
+            return {
+                id: index,
+                invoice_id: obj.invoice_id,
+                sale_man_id: obj.sale_man_id,
+                customer_id: obj.customer_id,
+                width: obj.width,
+                length: obj.length,
+                finishWidth: obj.finishWidth === undefined ? '' : obj.finishWidth,
+                finishLength: obj.finishLength === undefined ? '' : obj.finishLength,
+                sillWidth: obj.sillWidth === undefined ? '' : obj.sillWidth,
+                measurement: obj.measurement === undefined ? '' : obj.measurement,
+                instruction: obj.instruction === undefined ? '' : obj.instruction,
+                hingeChoice: obj.hingeChoice === undefined ? '' : obj.hingeChoice,
+                mount: obj.mount  === undefined ? '' : (obj.mount.length == 0 ? "OM" : obj.mount),
+                louver: obj.louver === undefined ? '' : obj.louver,
+                panel: obj.panel === undefined ? '' : obj.panel,
+                outsideFrame: obj.outsideFrame === undefined ? '' : obj.outsideFrame,
+                insideFrame: obj.insideFrame === undefined ? '' : obj.insideFrame,
+                color: obj.color === undefined ? '' : obj.color,
+                rail: obj.rail === undefined ? '' : obj.rail,
+                dividerSplitOption: obj.dividerSplitOption === undefined ? '' : obj.dividerSplitOption,
+                dividerSplitSize: obj.dividerSplitSize === undefined ? '' : obj.dividerSplitSize,
+                choice: obj.choice === undefined ? '' : obj.choice,
+                frame: obj.frame === undefined ? '' : obj.frame,
+                numOfFrame: obj.numOfFrame === undefined ? '' : obj.numOfFrame
+            };
+        });
+        setDataForOrders([...dataOrders, ...orders]);
     })
     
     useEffect(() => {
+        let isCancelled = false
         setFormInfoSaleManId()
         setFormInfoSaleManName()
         setFormInfoCustomerId()
@@ -239,7 +343,12 @@ const MainComponent = ({formInfo, formState}) => {
         setFormInfoCustomerName()
         setFormInfoCompanyId()
         setFormInfoInvoiceId()
-        initializeFields()
+        if( !isCancelled){
+            initializeFields()
+        }
+        return (isCancelled) => {
+            isCancelled = true;
+        };
     }, [])
 
     const initialValues = {
@@ -306,6 +415,7 @@ const MainComponent = ({formInfo, formState}) => {
 
         setShowError(false)
         let index = dataForTables.length
+        // data to display in table    
         const dataTable = {
             id: index,
             width: width,
@@ -313,11 +423,10 @@ const MainComponent = ({formInfo, formState}) => {
             hingeChoice: hingeChoice,
             panel: panel,
             mount: mount,
-            outsideFrame: outsideFrame,
-            insideFrame: insideFrame,
+            frameSize: outsideFrame ? outsideFrame : insideFrame,
             frame: frame,
         }
-
+        // data to send back to server
         const dataOrder = {
             id: index,
             invoice_id: invoiceId,
@@ -344,8 +453,14 @@ const MainComponent = ({formInfo, formState}) => {
             frame: frame,
             numOfFrame: numOfFrame
         }
-        setDataForTables([...dataForTables, dataTable])
-        setDataForOrders([...dataOrders, dataOrder])
+        // if(sessionStorage.getItem('invoice') === 'reuse' && dataForTables[0][0] !== undefined){
+        //     setDataForTables([...dataForTables[0], dataTable])
+        //     setDataForOrders([...dataOrders[0], dataOrder])
+        // }            
+        // else{
+            setDataForTables([...dataForTables, dataTable])    
+            setDataForOrders([...dataOrders, dataOrder])
+        // }            
         setShowHideTable(true)
         setDisable(false)
     })    
@@ -425,7 +540,7 @@ const MainComponent = ({formInfo, formState}) => {
                             <div className="div-horizontal-spacing"></div>
                             <div className="classdiv div-parent" >
                                 <label className="label-main-small">Invoice</label>
-                                <input id={dataMain[0][0].id} classdiv="div-textbox-main" {...register("invoiceNumber", { required: true })} name="invoiceNumber" type="text-main" disabled={disableInvoiceField} 
+                                <input id={dataMain[0][0].id} classdiv="div-textbox-main" {...register("invoiceNumber", { required: true })} name="invoiceNumber" type="text-main" 
                                 value={invoiceId} onChange={handleInvoiceChange}/>
                             </div>
                             <div className="div-horizontal-spacing"></div>
